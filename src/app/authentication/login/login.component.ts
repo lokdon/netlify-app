@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit
   ngOnInit(): void {
       if(localStorage.getItem('authToken')!=null)
       {
-        this.router.navigate(['user/dashboard'])
+        this.router.navigate(['user/files'])
       }
   }
 

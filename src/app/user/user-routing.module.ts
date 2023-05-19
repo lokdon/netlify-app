@@ -4,8 +4,8 @@ import { Route, RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { AuthGuard } from '../AppServices/auth-guard.guard';
 import { FilesComponent } from './files/files.component';
-import { ChatBotComponent } from './chat-bot/chat-bot.component';
 import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
+import { GenerateQuestionsAnsComponent } from './generate-questions-ans/generate-questions-ans.component';
 
 const routes: Routes = [
   {
@@ -13,17 +13,18 @@ const routes: Routes = [
     component: MainLayoutComponent, // Use LayoutAComponent as the layout for this module
     canActivate: [AuthGuard],
     children: [
-      {
-        path: 'dashboard',
-        component: DashboardComponent
-      },
+      // {
+      //   path: 'dashboard',
+      //   component: DashboardComponent
+      // },
       {
         path: 'files',
         component: FilesComponent
       },
+
       {
-        path: 'bot',
-        component: ChatBotComponent
+        path: 'questionsandans',
+        component: GenerateQuestionsAnsComponent
       },
       // Add more child routes for the module
     ]

@@ -1,11 +1,12 @@
-import { Component } from '@angular/core';
-import { CalendarModule } from 'primeng/calendar';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormsModule } from '@angular/forms';
+
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+  styleUrls: ['./dashboard.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
 
 
@@ -17,7 +18,8 @@ export class DashboardComponent {
   constructor(builder: FormBuilder) {
     
     this.formGroup = builder.group({
-      selectedCity : new FormControl<City | null>(null)
+      selectedCity : new FormControl<City | null>(null),
+      text:['']
     });
   }
 

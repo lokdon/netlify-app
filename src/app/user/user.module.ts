@@ -7,11 +7,12 @@ import { FooterComponent } from './layout/footer/footer.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { NavbarComponent } from './layout/navbar/navbar.component';
 import { FilesComponent } from './files/files.component';
-import { ChatBotComponent } from './chat-bot/chat-bot.component';
 import { RouterModule } from '@angular/router';
 import { CalendarModule } from 'primeng/calendar';
 import { DropdownModule } from 'primeng/dropdown';
+import { InputTextModule } from 'primeng/inputtext';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { GenerateQuestionsAnsComponent } from './generate-questions-ans/generate-questions-ans.component';
 
 
 @NgModule({
@@ -22,7 +23,7 @@ import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
     DashboardComponent,
     NavbarComponent,
     FilesComponent,
-    ChatBotComponent,
+    GenerateQuestionsAnsComponent,
   ],
   imports: [
     CommonModule,
@@ -32,6 +33,7 @@ import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
     FormsModule,
     ReactiveFormsModule,
     DropdownModule,
+    InputTextModule
   ]
 })
 export class UserModule { }
