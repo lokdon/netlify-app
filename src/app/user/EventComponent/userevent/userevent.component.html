@@ -1,73 +1,71 @@
-<p>userevent works!</p>
-
 <section class="section">
     <div class="row">
          
-<div class="card">
-    <p-table    [value]="eventList"
-                [lazy]="true"
-                (onLazyLoad)="loadEvents($event)"
-                dataKey="id"
-                [tableStyle]="{ 'min-width': '75rem' }"
-                [paginator]="true"
-                [rows]="3"
-                selectionMode=" "
-                [totalRecords]="totalRecords"
-                [loading]="loading"
-                >
-        <ng-template pTemplate="caption">
-            <div class="flex align-items-center justify-content-between">
-                Products
-                <p-button icon="pi pi-refresh"></p-button>
-            </div>
-        </ng-template> 
-        <ng-template pTemplate="header">
-            <tr>
-                <th style="width: 5rem"></th>
-                <th pSortableColumn="Name">Name <p-sortIcon field="name"></p-sortIcon></th>
-                <th pSortableColumn="Status">Status <p-sortIcon field="price"></p-sortIcon></th>
-                <th pSortableColumn="EventDate">EventDate <p-sortIcon field="EventDate"></p-sortIcon></th>
-                <th pSortableColumn="SubmissionDate">SubmissionDate <p-sortIcon field="SubmissionDate"></p-sortIcon></th>
-                <th pSortableColumn="NoOfGuest">Guests <p-sortIcon field="NoOfGuest"></p-sortIcon></th>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-event let-expanded="expanded">
-            <tr>
-                <td>
-                    <button type="button" pButton pRipple [pRowToggler]="event.ParentEvent" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
-                </td>
-                <td>{{event.ParentEvent.Name }}</td>
-                <td>{{event.ParentEvent.Status}}</td>
-                <td>{{event.ParentEvent.EventDate}}</td>
-                <td>{{event.ParentEvent.SubmissionDate}}</td>
-                <td>{{event.ParentEvent.NoOfGuest}}</td>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="rowexpansion" let-event>
-            <tr>
-                <td colspan="7">
-                    <div class="p-3">
-                        <p-table [value]="event.EventStatusHistory" dataKey="id">
-                            <ng-template pTemplate="body" let-eventStatus>
-                                <tr>
-                                    <td>{{eventStatus.Name }}</td>
-                                    <td>{{eventStatus.Status}}</td>
-                                    <td>{{eventStatus.EventDate}}</td>
-                                    <td>{{eventStatus.SubmissionDate}}</td>
-                                </tr>
-                            </ng-template>
-                            <ng-template pTemplate="emptymessage">
-                                <tr>
-                                    <td colspan="6">There are no order for this product yet.</td>
-                                </tr>
-                            </ng-template>
-                        </p-table>
-                    </div>
-                </td>
-            </tr>
-        </ng-template>
-    </p-table>
-</div>
+    <div class="card">
+        <p-table    [value]="eventList"
+                    [lazy]="true"
+                    (onLazyLoad)="loadEvents($event)"
+                    dataKey="id"
+                    [tableStyle]="{ 'min-width': '75rem' }"
+                    [paginator]="true"
+                    [rows]="3"
+                    selectionMode=" "
+                    [totalRecords]="totalRecords"
+                    [loading]="loading"
+                    >
+            <ng-template pTemplate="caption">
+                <div class="flex align-items-center justify-content-between">
+                    Products
+                    <p-button icon="pi pi-refresh"></p-button>
+                </div>
+            </ng-template> 
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="width: 5rem"></th>
+                    <th pSortableColumn="Name">Name <p-sortIcon field="name"></p-sortIcon></th>
+                    <th pSortableColumn="Status">Status <p-sortIcon field="price"></p-sortIcon></th>
+                    <th pSortableColumn="EventDate">EventDate <p-sortIcon field="EventDate"></p-sortIcon></th>
+                    <th pSortableColumn="SubmissionDate">SubmissionDate <p-sortIcon field="SubmissionDate"></p-sortIcon></th>
+                    <th pSortableColumn="NoOfGuest">Guests <p-sortIcon field="NoOfGuest"></p-sortIcon></th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-event let-expanded="expanded">
+                <tr>
+                    <td>
+                        <button type="button" pButton pRipple [pRowToggler]="event.ParentEvent" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                    </td>
+                    <td>{{event.ParentEvent.Name }}</td>
+                    <td>{{event.ParentEvent.Status}}</td>
+                    <td>{{event.ParentEvent.EventDate}}</td>
+                    <td>{{event.ParentEvent.SubmissionDate}}</td>
+                    <td>{{event.ParentEvent.NoOfGuest}}</td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="rowexpansion" let-event>
+                <tr>
+                    <td colspan="7">
+                        <div class="p-3">
+                            <p-table [value]="event.EventStatusHistory" dataKey="id">
+                                <ng-template pTemplate="body" let-eventStatus>
+                                    <tr>
+                                        <td>{{eventStatus.Name }}</td>
+                                        <td>{{eventStatus.Status}}</td>
+                                        <td>{{eventStatus.EventDate}}</td>
+                                        <td>{{eventStatus.SubmissionDate}}</td>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="emptymessage">
+                                    <tr>
+                                        <td colspan="6">There are no order for this product yet.</td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
         
 <!-- <p-table [value]="products" [tableStyle]="{'min-width': '60rem'}">
     <ng-template pTemplate="caption">
@@ -103,4 +101,4 @@
     </ng-template>
 </p-table> -->
     </div>
-  </section>
+ </section>

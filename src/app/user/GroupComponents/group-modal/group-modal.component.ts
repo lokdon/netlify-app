@@ -5,6 +5,7 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { IAddressService } from 'src/app/AppServices/AppWriteServices/AddressServices/IAddressService';
 import { IContactService } from 'src/app/AppServices/AppWriteServices/ContactServices/IContactService';
 import { IGroupBrokerService } from 'src/app/AppServices/AppWriteServices/GroupServices/IGroupBrokerService';
+import { GroupServiceNotifier } from 'src/app/AppServices/SharedComponentServices/GroupServiceNotifier';
 import { GroupModel } from 'src/app/Models/GroupModel';
 
 @Component({
@@ -27,7 +28,8 @@ constructor(builder: FormBuilder,
             private groupService:IGroupBrokerService,
             public dialogService: DialogService, 
             private ref: DynamicDialogRef,
-            public messageService: MessageService)
+            public messageService: MessageService,
+            public groupNotifier:GroupServiceNotifier)
 {
 
   this.groupFormGroup = builder.group({
@@ -43,11 +45,11 @@ get groupFormControl()
 }
 
 async submitFormAsync(){
-    alert('submit form called');
-
     if(this.groupFormGroup.valid)
     {
-       await this.createGroupAsync();  
+      this.groupNotifier.InvokeGroupMessageEvent('123444'); 
+      
+      //await this.createGroupAsync();  
     }else
     {
       Object.keys(this.groupFormGroup.controls).forEach(field => {
@@ -56,6 +58,12 @@ async submitFormAsync(){
       });
     }
 
+  }
+
+  closeDialogBox()
+  {
+    alert('called close button');
+    this.ref.close();
   }
 
 
