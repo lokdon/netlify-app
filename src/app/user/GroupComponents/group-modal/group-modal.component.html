@@ -1,0 +1,39 @@
+<main>
+    <div class="container">
+        <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
+              <div class="card mb-3">
+                  <div class="card-body">
+
+                    <form [formGroup]="groupFormGroup" class="row g-3 needs-validation" (ngSubmit)="submitFormAsync()">
+                        
+                        <div class="col-md-6">
+                            <label class="form-label">First Name</label>
+                            <input type="text" 
+                                      formControlName="name" 
+                                      [ngClass]="
+                                            {
+                                            'text-border-danger':groupFormControl['name'].invalid && groupFormControl['name'].touched, 
+                                            'text-border-success' :!groupFormControl['name'].invalid  
+                                            }" 
+                                       class="form-control"  
+                                       placeholder="email"/>
+                            <div *ngIf="groupFormControl['name'].invalid && (groupFormControl['name'].dirty || groupFormControl['name'].touched)" class="alert alert-danger">
+                              <div *ngIf="groupFormControl['name'].errors?.['required']">
+                               FirstName is required
+                              </div>
+                            </div> 
+                        </div>
+                     <div class="col-12">
+                        <button type="submit" class="btn btn-primary">Sign in</button>
+                      </div>
+                 </form>
+
+                    
+                </div>
+            </div>
+
+        </section>
+    </div>
+</main><!-- End #main -->
+
+

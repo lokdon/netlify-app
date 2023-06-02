@@ -1,0 +1,202 @@
+<main>
+    <div class="container">
+        <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
+              <div class="card mb-3">
+                  <div class="card-body">
+                    <div class="pt-4 pb-2">
+                      <h5 class="card-title text-center pb-0 fs-4">Create an Account</h5>
+                      <p class="text-center small">Enter your personal details to create account</p>
+                    </div>
+
+                    <form [formGroup]="contactFormGroup" class="row g-3 needs-validation" (ngSubmit)="submitFormAsync()">
+                        
+                        <div class="col-md-6">
+                            <label class="form-label">First Name</label>
+                            <input type="text" 
+                                      formControlName="firstName" 
+                                      [ngClass]="
+                                            {
+                                            'text-border-danger':contactFormControl['firstName'].invalid && contactFormControl['firstName'].touched, 
+                                            'text-border-success' :!contactFormControl['firstName'].invalid  
+                                            }" 
+                                       class="form-control"  
+                                       placeholder="email"/>
+                            <div *ngIf="contactFormControl['firstName'].invalid && (contactFormControl['firstName'].dirty || contactFormControl['firstName'].touched)" class="alert alert-danger">
+                              <div *ngIf="contactFormControl['firstName'].errors?.['required']">
+                               FirstName is required
+                              </div>
+                            </div> 
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Last Name</label>
+                            <input type="text" 
+                                      formControlName="lastName" 
+                                      [ngClass]="
+                                            {
+                                            'text-border-danger':contactFormControl['lastName'].invalid && contactFormControl['lastName'].touched, 
+                                            'text-border-success' :!contactFormControl['lastName'].invalid  
+                                            }" 
+                                       class="form-control"  
+                                       placeholder="email"/>
+                            <div *ngIf="contactFormControl['lastName'].invalid && (contactFormControl['lastName'].dirty || contactFormControl['lastName'].touched)" class="alert alert-danger">
+                              <div *ngIf="contactFormControl['lastName'].errors?.['required']">
+                               FirstName is required
+                              </div>
+                            </div> 
+                        </div>
+
+
+                        <div class="col-md-6">
+                            <label class="form-label">Email</label>
+                            <input type="email" 
+                                      formControlName="email" 
+                                      [ngClass]="
+                                            {
+                                            'text-border-danger':contactFormControl['email'].invalid && contactFormControl['email'].touched, 
+                                            'text-border-success' :!contactFormControl['email'].invalid  
+                                            }" 
+                                       class="form-control"  
+                                       placeholder="email"/>
+                            <div *ngIf="contactFormControl['email'].invalid && (contactFormControl['email'].dirty || contactFormControl['email'].touched)" class="alert alert-danger">
+                              <div *ngIf="contactFormControl['email'].errors?.['required']">
+                               FirstName is required
+                              </div>
+                              <div *ngIf="contactFormControl['email'].errors?.['email']">
+                                Email is not in correct form
+                               </div>
+                            </div> 
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Mobile Number</label>
+                            <input type="text" 
+                                      formControlName="mobileNo" 
+                                      [ngClass]="
+                                            {
+                                            'text-border-danger':contactFormControl['mobileNo'].invalid && contactFormControl['mobileNo'].touched, 
+                                            'text-border-success' :!contactFormControl['mobileNo'].invalid  
+                                            }" 
+                                       class="form-control"  
+                                       placeholder="email"/>
+                            <div *ngIf="contactFormControl['mobileNo'].invalid && (contactFormControl['mobileNo'].dirty || contactFormControl['mobileNo'].touched)" class="alert alert-danger">
+                              <div *ngIf="contactFormControl['mobileNo'].errors?.['required']">
+                               Mobile number  is required
+                              </div>
+                            </div> 
+                        </div>
+                        
+                        <div class="col-12">
+                            <label class="form-label">Mobile Number</label>
+                            <input type="text" 
+                                      formControlName="address1" 
+                                      [ngClass]="
+                                            {
+                                            'text-border-danger':contactFormControl['address1'].invalid && contactFormControl['address1'].touched, 
+                                            'text-border-success' :!contactFormControl['address1'].invalid  
+                                            }" 
+                                       class="form-control"  
+                                       placeholder="email"/>
+                            <div *ngIf="contactFormControl['address1'].invalid && (contactFormControl['address1'].dirty || contactFormControl['address1'].touched)" class="alert alert-danger">
+                              <div *ngIf="contactFormControl['address1'].errors?.['required']">
+                               Address is required
+                              </div>
+                            </div> 
+                        </div>
+                     
+                        <div class="col-12">
+                            <label class="form-label">Mobile Number</label>
+                            <input type="text" 
+                                      formControlName="address2" 
+                                       class="form-control"  
+                                       placeholder="Address"/>
+                        </div>
+                      
+                     
+                     
+                        <div class="col-md-3">
+                            <label class="form-label">Country</label>
+                            <input type="text" 
+                                      formControlName="country" 
+                                      [ngClass]="
+                                            {
+                                            'text-border-danger':contactFormControl['country'].invalid && contactFormControl['country'].touched, 
+                                            'text-border-success' :!contactFormControl['country'].invalid  
+                                            }" 
+                                       class="form-control"  
+                                       placeholder="email"/>
+                            <div *ngIf="contactFormControl['country'].invalid && (contactFormControl['country'].dirty || contactFormControl['country'].touched)" class="alert alert-danger">
+                              <div *ngIf="contactFormControl['country'].errors?.['required']">
+                               Country is required
+                              </div>
+                            </div> 
+                        </div>
+                       
+
+                        <div class="col-md-3">
+                            <label class="form-label">State</label>
+                            <input type="text" 
+                                      formControlName="state" 
+                                      [ngClass]="
+                                            {
+                                            'text-border-danger':contactFormControl['state'].invalid && contactFormControl['state'].touched, 
+                                            'text-border-success' :!contactFormControl['state'].invalid  
+                                            }" 
+                                       class="form-control"  
+                                       placeholder="email"/>
+                            <div *ngIf="contactFormControl['state'].invalid && (contactFormControl['state'].dirty || contactFormControl['state'].touched)" class="alert alert-danger">
+                              <div *ngIf="contactFormControl['state'].errors?.['required']">
+                               Country is required
+                              </div>
+                            </div> 
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label">City</label>
+                            <input type="text" 
+                                      formControlName="city" 
+                                      [ngClass]="
+                                            {
+                                            'text-border-danger':contactFormControl['city'].invalid && contactFormControl['city'].touched, 
+                                            'text-border-success' :!contactFormControl['city'].invalid  
+                                            }" 
+                                       class="form-control"  
+                                       placeholder="email"/>
+                            <div *ngIf="contactFormControl['city'].invalid && (contactFormControl['city'].dirty || contactFormControl['city'].touched)" class="alert alert-danger">
+                              <div *ngIf="contactFormControl['city'].errors?.['required']">
+                               City is required
+                              </div>
+                            </div> 
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label">Pincode</label>
+                            <input type="text" 
+                                      formControlName="pincode" 
+                                      [ngClass]="
+                                            {
+                                            'text-border-danger':contactFormControl['pincode'].invalid && contactFormControl['pincode'].touched, 
+                                            'text-border-success' :!contactFormControl['pincode'].invalid  
+                                            }" 
+                                       class="form-control"  
+                                       placeholder="email"/>
+                            <div *ngIf="contactFormControl['pincode'].invalid && (contactFormControl['pincode'].dirty || contactFormControl['pincode'].touched)" class="alert alert-danger">
+                              <div *ngIf="contactFormControl['pincode'].errors?.['required']">
+                               Country is required
+                              </div>
+                            </div> 
+                        </div>
+                      
+                     <div class="col-12">
+                        <button type="submit" class="btn btn-primary">Sign in</button>
+                      </div>
+                 </form>
+
+                    
+                  </div>
+              </div>
+
+        </section>
+    </div>
+</main><!-- End #main -->
+

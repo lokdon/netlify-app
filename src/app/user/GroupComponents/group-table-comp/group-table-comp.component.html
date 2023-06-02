@@ -1,0 +1,45 @@
+
+<section class="section">
+    <div class="row">
+        <p-toast></p-toast>
+        <p-table  styleClass="p-datatable-gridlines" [tableStyle]="{'min-width': '40rem'}">
+          
+        <ng-template pTemplate="caption">
+            <div class="d-flex justify-content-between" >
+                <div class="p-2 bd-highlight"> 
+                    <input type="text" placeholder="search" pInputText class="p-inputtext-sm" [style]="{'width':'300px' }"/>
+                    <p-button icon="pi pi-refresh"  class="ms-2" styleClass="p-button-sm"></p-button> 
+                </div>
+                <div class="ms-auto p-2 bd-highlight">
+                    <p-button icon="pi pi-plus-circle" (click)="show()" styleClass="p-button-success p-button-sm"></p-button>
+                    <p-button icon="pi pi-refresh"  class="ms-2" styleClass="p-button-sm"></p-button> 
+                </div>
+            </div>  
+        </ng-template>
+         
+         
+          <ng-template pTemplate="header">
+              <tr>
+                  <th>Name</th>
+                  <th>UserId</th>
+                  <th>File Id</th>
+              </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-filedata>
+              <tr>
+                  <!-- <td>{{filedata.FileName}}</td>
+                  <td>{{filedata.UserId}}</td>
+                  <td>{{filedata.FileId}}</td> -->
+                  
+              </tr>
+          </ng-template>
+          <ng-template pTemplate="summary">
+              <div class="flex align-items-center justify-content-between">
+                
+              </div>
+          </ng-template>
+      </p-table>
+    </div>
+  </section>
+
+

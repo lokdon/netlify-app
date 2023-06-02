@@ -22,7 +22,7 @@ export class AuthGuard  {
       }else{
         console.log("not auth key found")
         this.router.navigate(['auth/login']);
-        return false
+        return false;
       }
 
       

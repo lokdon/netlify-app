@@ -20,6 +20,7 @@ export class AppWriteHttpClientService {
     .setEndpoint('https://cloud.appwrite.io/v1') // Your API Endpoint
     .setProject('6463ad29c249f2b410b7') // Your project ID
     return client;
+    
   }
 
 }

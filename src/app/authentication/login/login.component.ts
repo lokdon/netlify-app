@@ -67,7 +67,7 @@ export class LoginComponent implements OnInit
       {
         await this.generateJwtTokenAsync();
         alert('logged in successfully');
-         this.router.navigate(["user/dashboard"]);
+         this.router.navigate(["user/files"]);
       }else{
         console.log(result);
       }

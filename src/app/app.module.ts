@@ -8,7 +8,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserModule } from './user/user.module';
 import { CalendarModule } from 'primeng/calendar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
+import { AppResources } from './AppServices/AppResources';
+import { ICategoryBrokerService } from './AppServices/AppWriteServices/CategoryService/ICategoryBrokerService';
+import { CategoryBrokerService } from './AppServices/AppWriteServices/CategoryService/category-broker.service';
+import { SidebarModule } from 'primeng/sidebar';
 
 @NgModule({
   declarations: [
@@ -24,7 +27,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     UserModule,
     BrowserAnimationsModule
   ],
-  providers: [],
+  providers: [AppResources],
+ 
   bootstrap: [AppComponent]
 })
 export class AppModule { }

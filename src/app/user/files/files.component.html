@@ -1,1 +1,115 @@
-<p>files works!</p>
+
+    <section class="section">
+      <div class="row">
+        <p-table [value]="userFileViewModel" styleClass="p-datatable-gridlines" [tableStyle]="{'min-width': '40rem'}">
+            
+            <ng-template pTemplate="caption">
+                <div class="row d-flex justify-content-between">
+                    <!-- <p-toast></p-toast> -->
+                    <!-- <p-fileUpload #fileUpload name="upload[]" (uploadHandler)="fileUploadHandler($event,fileUpload)"  (onUpload)="onUploadAsync($event)" [multiple]="true" accept=".pdf" [maxFileSize]="100000000"> -->
+                        <!-- <p-fileUpload #fileUpload mode="basic" name="upload[]" [maxFileSize]="4000000" (onSelect)="onUploadAsync1($event,fileUpload)" chooseLabel="Upload"> -->
+                    <p-fileUpload #fileUpload name="upload[]" [customUpload]="true" (uploadHandler)="fileUploadHandler($event,fileUpload)" [multiple]="false" accept=".pdf" [maxFileSize]="100000000">
+                        <ng-template pTemplate="content">
+                            <div class="row">
+                                <p-divider [style]="{'background-color': 'black'}"></p-divider>
+                            </div>
+                            <div class="d-flex justify-content-between" >
+                                    <div class="p-2 bd-highlight"> 
+                                        <input type="text" placeholder="search" pInputText class="p-inputtext-sm" [style]="{'width':'300px' }"/>
+                                    </div>
+                                    <div class="p-2 bd-highlight">
+                                        <p-button icon="pi pi-search" styleClass="p-button-primary p-button-sm"></p-button>
+                                    </div>
+                                    <div class="ms-auto p-2 bd-highlight">
+                                        <p-button icon="pi pi-plus-circle" styleClass="p-button-success p-button-sm"></p-button>
+                                        <ul *ngIf="uploadedFiles.length">
+                                            <li *ngFor="let file of uploadedFiles">{{ file.name }} - {{ file.size }} bytes</li>
+                                        </ul>
+                                        <!-- <p-button icon="pi pi-refresh"  class="ms-2" styleClass="p-button-sm"></p-button> -->
+                                        <!-- <span class="p-buttonset ms-1">
+                                            <button pButton pRipple label="Save" class="ms-1" icon="pi pi-check"></button>
+                                            <button pButton pRipple label="Delete" class="ms-1" icon="pi pi-trash"></button>
+                                            <button pButton pRipple label="Cancel" class="ms-1" icon="pi pi-times"></button>
+                                        </span> -->
+                                        <!-- <i class="pi pi-check" style="color: slateblue"></i>
+                                        <i class="pi pi-times" style="color: green"></i>
+                                        <i class="pi pi-search" style="color: 'var(--primary-color)'"></i>
+                                        <i class="pi pi-user" style="color: #708090"></i> -->
+                                    </div>
+                                  
+                            </div>
+                        </ng-template> 
+                    </p-fileUpload>
+                    
+                    
+                    
+                    
+                    <!-- <p-fileUpload name="myfile[]" url="https://www.primefaces.org/cdn/api/upload.php" [multiple]="true" accept="pdf/*" [maxFileSize]="10000">
+                        <ng-template pTemplate="toolbar">
+                            <div class="py-3">Upload 3 Files</div>
+                        </ng-template>
+                        <ng-template let-file pTemplate="file">
+                            <div>Custom UI to display a file</div>
+                        </ng-template>
+                        
+                        
+                        <ng-template pTemplate="content">
+                            <div class="row">
+                                <p-divider [style]="{'background-color': 'black'}"></p-divider>
+                            </div>
+                            <div class="d-flex justify-content-between" >
+                                    <div class="p-2 bd-highlight"> 
+                                        <input type="text" placeholder="search" pInputText class="p-inputtext-sm" [style]="{'width':'300px' }"/>
+                                    </div>
+                                    <div class="p-2 bd-highlight">
+                                        <p-button icon="pi pi-search" styleClass="p-button-primary p-button-sm"></p-button>
+                                    </div>
+                                    <div class="ms-auto p-2 bd-highlight">
+                                        <p-button icon="pi pi-plus-circle" styleClass="p-button-success p-button-sm"></p-button>
+                                         <p-button icon="pi pi-refresh"  class="ms-2" styleClass="p-button-sm"></p-button> -->
+                                        <!-- <span class="p-buttonset ms-1">
+                                            <button pButton pRipple label="Save" class="ms-1" icon="pi pi-check"></button>
+                                            <button pButton pRipple label="Delete" class="ms-1" icon="pi pi-trash"></button>
+                                            <button pButton pRipple label="Cancel" class="ms-1" icon="pi pi-times"></button>
+                                        </span> -
+                                         <i class="pi pi-check" style="color: slateblue"></i>
+                                        <i class="pi pi-times" style="color: green"></i>
+                                        <i class="pi pi-search" style="color: 'var(--primary-color)'"></i>
+                                        <i class="pi pi-user" style="color: #708090"></i> 
+                                    </div>
+                                  
+                            </div>
+                        </ng-template> 
+                    </p-fileUpload> -->
+                      
+                </div>
+            </ng-template>
+            
+          
+           
+           
+           
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Name</th>
+                    <th>UserId</th>
+                    <th>File Id</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-filedata>
+                <tr>
+                    <td>{{filedata.FileName}}</td>
+                    <td>{{filedata.UserId}}</td>
+                    <td>{{filedata.FileId}}</td>
+                    
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="summary">
+                <div class="flex align-items-center justify-content-between">
+                  
+                </div>
+            </ng-template>
+        </p-table>
+      </div>
+    </section>
+

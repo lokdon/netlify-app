@@ -1,0 +1,29 @@
+::ng-deep .p-fileupload .p-fileupload-buttonbar {
+    background:transparent !important;
+    padding: 1.25rem;
+    border: 0px !important;
+    color: #343a40;
+    border-bottom: 0 none;
+    border-top-right-radius: 6px;
+    border-top-left-radius: 6px;
+}
+
+
+::ng-deep .p-fileupload .p-fileupload-content {
+     background:transparent !important; 
+     padding: 0rem !important; 
+     border: 0px !important;
+    color: #495057; 
+    border-bottom-right-radius: 6px;
+    border-bottom-left-radius: 6px;
+   
+}
+
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr > td {
+    border-bottom: none;
+  }
+
+  :host ::ng-deep  .p-datatable.p-datatable-gridlines .p-datatable-tbody > tr > td{
+    border:unset;
+   
+}
