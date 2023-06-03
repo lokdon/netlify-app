@@ -5,6 +5,10 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NonauthlayoutComponent } from './layout/nonauthlayout/nonauthlayout.component';
+import { ProgressBarModule } from 'primeng/progressbar';
+import { ToastModule } from 'primeng/toast';
+import { IUSerAccountService } from '../AppServices/AppWriteServices/AccountServices/Login/IUserAccountService';
+import { UserAccountService } from '../AppServices/AppWriteServices/AccountServices/Login/useraccount.service';
 
 
 
@@ -19,7 +23,17 @@ import { NonauthlayoutComponent } from './layout/nonauthlayout/nonauthlayout.com
     CommonModule,
     AuthenticationRoutingModule,
     ReactiveFormsModule,
-    FormsModule
-  ]
+    FormsModule,
+    ProgressBarModule,
+    ToastModule,
+    
+  ],
+
+  providers: 
+  [
+      { provide: IUSerAccountService, useClass: UserAccountService },
+      
+    
+  ],
 })
 export class AuthenticationModule { }

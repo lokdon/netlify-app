@@ -17,6 +17,9 @@ export class RegisterComponent implements OnInit{
   submitted:boolean = false;
   registerForm:FormGroup;
   appService:AppWriteHttpClientService
+
+  readonly requiredError:string="This Field is required"; 
+  readonly inValidEmailError:string="Enter a valid email address"; 
   
   constructor
   (
@@ -42,7 +45,7 @@ export class RegisterComponent implements OnInit{
   
   async submitRegisterForm()
   {
-     if(this.registerForm.valid)
+    if(this.registerForm.valid)
      {
          await this.registerUserAsync();
        
@@ -80,5 +83,59 @@ export class RegisterComponent implements OnInit{
     this.submitted = false;
     this.registerForm.reset();
 }
+
+iSNameEnteredCorrect():boolean
+{
+  if( this.registerFormControl['name'].invalid && 
+     (this.registerFormControl['name'].dirty || 
+     this.registerFormControl['name'].touched|| this.submitted))
+  {
+      return true;
+  }
+  
+  return false;
+}
+
+isEmailEnteredCorrect():boolean
+{
+  if( this.registerFormControl['email'].invalid && 
+     (this.registerFormControl['email'].dirty || 
+     this.registerFormControl['email'].touched|| this.submitted))
+  {
+      return true;
+  }
+  
+  return false;
+}
+
+isPasswordEnteredCorrect():boolean
+{
+  if( this.registerFormControl['password'].invalid && 
+  (this.registerFormControl['password'].dirty || 
+  this.registerFormControl['password'].touched|| this.submitted))
+{
+   return true;
+}
+
+return false;
+}
+
+showRequiredError(controlName:string):boolean
+{
+  if(this.registerFormControl[controlName].errors?.['required'])
+  return true;
+
+  return false;
+}
+
+showValidEmailError(controlName:string):boolean
+{
+  if(this.registerFormControl[controlName].errors?.['email'])
+  return true;
+
+  return false;
+}
+
+
 
 }

@@ -22,6 +22,8 @@ export class GroupModalComponent {
     Count: 0
   };
 
+  createdGroupId:string=''
+
 groupFormGroup: FormGroup;
 
 constructor(builder: FormBuilder,
@@ -47,9 +49,9 @@ get groupFormControl()
 async submitFormAsync(){
     if(this.groupFormGroup.valid)
     {
-      this.groupNotifier.InvokeGroupMessageEvent('123444'); 
-      
-      //await this.createGroupAsync();  
+      await this.createGroupAsync();
+      this.groupNotifier.InvokeGroupMessageEvent(this.groupModel.RecordId);   
+      console.log(this.groupModel.RecordId);
     }else
     {
       Object.keys(this.groupFormGroup.controls).forEach(field => {
@@ -71,9 +73,9 @@ async createGroupAsync(){
     this.groupModel.Name = this.groupFormGroup.controls['name'].value;;
     var result = await this.groupService.createGroupForUserAsync(this.groupModel);
 
-    if(result)
+    if(result.IsValid)
     {
-        alert('contact added successfully');
+        this.groupModel = result.Success;
         this.groupFormGroup.reset(this.groupFormGroup.value);
         console.log(this.ref);
         this.ref.close();

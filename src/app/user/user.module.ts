@@ -39,6 +39,7 @@ import { DynamicDialogModule } from 'primeng/dynamicdialog';
 import { ToastModule } from 'primeng/toast';
 import { IGroupBrokerService } from '../AppServices/AppWriteServices/GroupServices/IGroupBrokerService';
 import { GroupBrokerService } from '../AppServices/AppWriteServices/GroupServices/group-broker-service.service';
+import { UserGroupComponent } from './GroupComponents/user-group/user-group.component';
 
 
 @NgModule({
@@ -54,6 +55,7 @@ import { GroupBrokerService } from '../AppServices/AppWriteServices/GroupService
     ContactContainerComponent,
     GroupTableCompComponent,
     GroupModalComponent,
+    UserGroupComponent,
   ],
   imports: [
     CommonModule,

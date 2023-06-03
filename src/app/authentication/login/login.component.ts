@@ -2,23 +2,31 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Account } from "appwrite";
+import { MessageService } from 'primeng/api';
+import { IUSerAccountService } from 'src/app/AppServices/AppWriteServices/AccountServices/Login/IUserAccountService';
 import { AppWriteHttpClientService } from 'src/app/AppServices/app-write-http-client.service';
+import { LoginModel } from 'src/app/Models/AccountModel';
 
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
+  providers: [MessageService]
 })
 
 export class LoginComponent implements OnInit
 {
     
     loginFormGroup: FormGroup;
-    appService:AppWriteHttpClientService;
     
-    constructor(builder: FormBuilder,appService:AppWriteHttpClientService,private router:Router) {
-      this.appService =appService;
+
+    submitDisabled:boolean = false;
+    
+    constructor(builder: FormBuilder,
+                private accountService:IUSerAccountService,
+                private router:Router,
+                public messageService:MessageService) {
       this.loginFormGroup = builder.group({
         email: ['',[Validators.required, Validators.email]],
         password: ['',Validators.required]
@@ -41,7 +49,7 @@ export class LoginComponent implements OnInit
 
  async submitLoginForm()
   {
-    
+    this.submitDisabled =true;
     if(this.loginFormGroup.valid)
      {
         await this.loginAsync()
@@ -51,37 +59,37 @@ export class LoginComponent implements OnInit
           const control = this.loginFormGroup.get(field);
           control?.markAsTouched({ onlySelf: true });
          });
+
+         this.submitDisabled =false;
      }
   } 
 
     async loginAsync()
     {
-      let client=this.appService.getClient();
-      const account = new Account(client);
-    
-      var email = this.loginFormGroup.controls['email'].value;
-      var password = this.loginFormGroup.controls['password'].value;
-      const result = await account.createEmailSession(email, password);
-  
-      if(result.current)
-      {
-        await this.generateJwtTokenAsync();
-        alert('logged in successfully');
-         this.router.navigate(["user/files"]);
-      }else{
-        console.log(result);
+      let loginModel:LoginModel={
+        Email: '',
+        Password: ''
       }
+    
+      loginModel.Email= this.loginFormGroup.controls['email'].value;
+      loginModel.Password = this.loginFormGroup.controls['password'].value;
+       
+      var result = await this.accountService.loginUserAsync(loginModel);
+
+      if(result.IsValid)
+      {
+        await this.accountService.generateJwtTokenAsync();
+        this.router.navigate(['user/files']);
+
+      }else{
+        //show notifiaction some error occurred;
+        this.submitDisabled =false;
+        this.messageService.add({ severity: 'failed', summary: 'failed', detail: 'Invalid user Id Password' });
+      }
+      
     }
 
 
-    async generateJwtTokenAsync()
-    {
-      let client=this.appService.getClient();
-      const account = new Account(client);
-      const jwtToken = await account.createJWT();
-      console.log('jwt token==' + jwtToken.jwt);
-      localStorage.setItem('authToken',jwtToken.jwt)
-    }
   
 }
 

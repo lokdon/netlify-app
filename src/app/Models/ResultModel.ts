@@ -1,7 +1,8 @@
 export type ApiResponseModel<T>={
     IsValid:boolean,
     Errors:ErroMessages[],
-    Success:T[]
+    Success:T
+    TotalRecordCount:number
 }
 
 type ErroMessages={

@@ -1,4 +1,5 @@
 import { GroupEntity, GroupModel } from "src/app/Models/GroupModel";
+import { PaginationSpecificationModel } from "src/app/Models/QuerySpecificationModel";
 import { ApiResponseModel } from "src/app/Models/ResultModel";
 
 export abstract class IGroupBrokerService
@@ -8,6 +9,8 @@ export abstract class IGroupBrokerService
     abstract getGroupByUserIdAsync(userId:string):Promise<ApiResponseModel<GroupModel>>;
 
     abstract getGroupListByUserIdAsync(userId:string):Promise<ApiResponseModel<GroupModel[]>>;
+    
+    abstract getPaginatedGroupListByUserIdAsync(userId: string, paginationModel:PaginationSpecificationModel): Promise<ApiResponseModel<GroupModel[]>> 
 
     abstract getGroupByRecordIdAsync(recordId:string):Promise<ApiResponseModel<GroupModel>>;
 

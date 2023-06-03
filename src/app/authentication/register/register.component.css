@@ -1,0 +1,33 @@
+.input-group-text {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.card-title {
+    color: #012970;
+}
+
+
+.alert-danger {
+    --bs-alert-color: #e3172a !important;
+    /* --bs-alert-bg: #f8d7da; */
+     --bs-alert-border-color:transparent !important; 
+}
+
+.alert {
+    --bs-alert-bg: transparent;
+    /* --bs-alert-padding-x: 1rem; */
+    --bs-alert-padding-x: 0rem !important;
+    --bs-alert-padding-y: 0rem !important;
+    --bs-alert-margin-bottom: 0rem !important;
+}
+
+.text-border-danger
+{
+    border-color: red;
+}
+
+.text-border-success
+{
+    border-color: green;
+}

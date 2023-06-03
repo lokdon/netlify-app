@@ -12,6 +12,7 @@ import { AppResources } from './AppServices/AppResources';
 import { ICategoryBrokerService } from './AppServices/AppWriteServices/CategoryService/ICategoryBrokerService';
 import { CategoryBrokerService } from './AppServices/AppWriteServices/CategoryService/category-broker.service';
 import { SidebarModule } from 'primeng/sidebar';
+import { ProgressBarModule } from 'primeng/progressbar';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { SidebarModule } from 'primeng/sidebar';
     FormsModule,
     ReactiveFormsModule,
     UserModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    ProgressBarModule
   ],
   providers: [AppResources],
  

@@ -23,42 +23,43 @@
                             <div class="col-12">
                                 <label for="yourName" class="form-label">Your Name</label>
                                 <input type="text"  class="form-control" formControlName="name">
-                                <div *ngIf="(registerFormControl['name'].invalid && (registerFormControl['name'].dirty || registerFormControl['name'].touched))" class="alert alert-danger form-danger">
-                                  <div *ngIf="registerFormControl['name'].errors?.['required']">Name is required</div>
+                                <div *ngIf="iSNameEnteredCorrect()" class="alert alert-danger form-danger">
+                                  <div *ngIf="showRequiredError('name')">{{requiredError}}</div>
                               </div>
                             </div>
     
                             <div class="col-12">
                               <label for="yourEmail" class="form-label">Your Email</label>
                               <input type="email"  class="form-control"  formControlName="email">
-                              <div *ngIf="(registerFormControl['email'].invalid && (registerFormControl['email'].dirty || registerFormControl['email'].touched))" class="alert alert-danger form-danger">
-                                <div *ngIf="registerFormControl['email'].errors?.['required']">Email is required</div>
-                                <div *ngIf="registerFormControl['email'].errors?.['email']">Enter a valid email address</div> 
+                              <div *ngIf="isEmailEnteredCorrect()" class="alert alert-danger form-danger">
+                                <div *ngIf="showRequiredError('email')">{{requiredError}}</div>
+                                <div *ngIf="showValidEmailError('email')">{{inValidEmailError}}</div> 
                               </div>
                             </div>
                             <div class="col-12">
                               <label for="yourPassword" class="form-label">Password</label>
                               <input type="text" class="form-control" formControlName="password">
-                              <div *ngIf="registerFormControl['password'].invalid && (registerFormControl['password'].dirty || registerFormControl['password'].touched)" class="alert alert-danger">
-                                <div *ngIf="registerFormControl['password'].errors?.['required']">
-                                  Password is required.
+                              <div *ngIf="isPasswordEnteredCorrect()" class="alert alert-danger">
+                                <div *ngIf="showRequiredError('password')">
+                                  {{requiredError}}
                                 </div>
                               </div> 
                             </div>
                             
                             
-                            <div class="col-12">
+                            <!-- <div class="col-12">
                               <div class="form-check">
                                 <input class="form-check-input" name="terms" type="checkbox" value="" id="acceptTerms" required>
                                 <label class="form-check-label" for="acceptTerms">I agree and accept the <a href="#">terms and conditions</a></label>
                                 <div class="invalid-feedback">You must agree before submitting.</div>
                               </div>
-                            </div>
+                            </div> -->
                             
                             
                             
                             <div class="col-12">
                               <button class="btn btn-primary w-100" type="submit">Create Account</button>
+                              <!-- <button class="btn btn-primary w-100" type="button" (click)="onReset()">Create Account</button> -->
                             </div>
                             
                             <div class="col-12">
@@ -67,15 +68,6 @@
                         </form>
                     </div>
                 </div>
-
-                <div class="credits">
-                  <!-- All the links in the footer should remain intact. -->
-                  <!-- You can delete the links only if you purchased the pro version. -->
-                  <!-- Licensing information: https://bootstrapmade.com/license/ -->
-                  <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-                  Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-                </div>
-
               </div>
             </div>
           </div>
