@@ -7,8 +7,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NonauthlayoutComponent } from './layout/nonauthlayout/nonauthlayout.component';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { ToastModule } from 'primeng/toast';
-import { IUSerAccountService } from '../AppServices/AppWriteServices/AccountServices/Login/IUserAccountService';
-import { UserAccountService } from '../AppServices/AppWriteServices/AccountServices/Login/useraccount.service';
+import { IUSerAccountService } from 'src/app/AppServices/AppWriteServices/AccountServices/Login/IUserAccountService';
+import { UserAccountService } from 'src/app/AppServices/AppWriteServices/AccountServices/Login/useraccount.service';
+import { RegisterViewFormErrors } from 'src/app/Validations/FormErrors/RegisterViewFormErrors';
+
 
 
 
@@ -32,6 +34,7 @@ import { UserAccountService } from '../AppServices/AppWriteServices/AccountServi
   providers: 
   [
       { provide: IUSerAccountService, useClass: UserAccountService },
+      RegisterViewFormErrors,
       
     
   ],

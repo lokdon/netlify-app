@@ -5,11 +5,11 @@ const routes: Routes = [
   
   {
     path: 'auth',
-    loadChildren: () => import('./authentication/authentication.module').then(m => m.AuthenticationModule)
+    loadChildren: () => import('./Views/Modules/authentication/authentication.module').then(m => m.AuthenticationModule)
   },
   {
     path: 'user',
-    loadChildren: () => import('./user/user.module').then(m => m.UserModule)
+    loadChildren: () => import('./Views/Modules/user/user.module').then(m => m.UserModule)
   },
 ];
 

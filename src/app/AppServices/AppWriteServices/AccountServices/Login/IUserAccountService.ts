@@ -1,5 +1,5 @@
 import { Client, Models } from "appwrite";
-import { LoginModel, LoginResponseModel } from "src/app/Models/AccountModel";
+import { LoginModel, LoginResponseModel, RegisterUserModel } from "src/app/Models/AccountModel";
 import { ApiResponseModel } from "src/app/Models/ResultModel";
 
 export abstract class IUSerAccountService
@@ -10,4 +10,6 @@ export abstract class IUSerAccountService
     abstract logOutUserAsync():Promise<boolean>;
 
     abstract generateJwtTokenAsync():Promise<Models.Jwt>
+
+    abstract registerUserAsync(model:RegisterUserModel):Promise<ApiResponseModel<boolean>>
 }

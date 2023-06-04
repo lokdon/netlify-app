@@ -2,7 +2,7 @@ import { Injectable, OnInit } from '@angular/core';
 import { AppWriteHttpClientService } from '../../app-write-http-client.service';
 import { Databases,Client, ID } from "appwrite";
 import { ICategoryBrokerService } from './ICategoryBrokerService';
-import { UserModule } from 'src/app/user/user.module';
+
 import { AppResources } from '../../AppResources';
 import { CategoryModel } from 'src/app/Models/CategoryModel';
 

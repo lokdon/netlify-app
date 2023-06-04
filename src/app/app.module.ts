@@ -3,9 +3,9 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { AuthenticationModule } from './authentication/authentication.module';
+
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { UserModule } from './user/user.module';
+
 import { CalendarModule } from 'primeng/calendar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppResources } from './AppServices/AppResources';
@@ -13,6 +13,10 @@ import { ICategoryBrokerService } from './AppServices/AppWriteServices/CategoryS
 import { CategoryBrokerService } from './AppServices/AppWriteServices/CategoryService/category-broker.service';
 import { SidebarModule } from 'primeng/sidebar';
 import { ProgressBarModule } from 'primeng/progressbar';
+import { AuthenticationModule } from './Views/Modules/authentication/authentication.module';
+import { UserModule } from './Views/Modules/user/user.module';
+import { BaseValidation } from './Validations/BaseValidation';
+import { RegisterValidation } from './Validations/RegisterValidation';
 
 @NgModule({
   declarations: [
@@ -29,7 +33,7 @@ import { ProgressBarModule } from 'primeng/progressbar';
     BrowserAnimationsModule,
     ProgressBarModule
   ],
-  providers: [AppResources],
+  providers: [AppResources,RegisterValidation],
  
   bootstrap: [AppComponent]
 })
