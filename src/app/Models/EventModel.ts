@@ -24,3 +24,14 @@ export type EventModelMVVM={
    ParentEvent:EventModel;
    EventStatusHistory : SubEventModel[]
 }
+
+
+export enum EventStatus{
+    Received=1, //events that we have accepted
+    Upcoming, //received upcoming events
+    Expired, //invited events expired
+    Created, //event created
+    CreatedSent, //sent to invite guest
+    ReceivedSent //reply to the invitation
+
+} 

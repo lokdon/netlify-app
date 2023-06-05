@@ -10,6 +10,7 @@ import { UsereventComponent } from './EventComponent/userevent/userevent.compone
 import { ContactContainerComponent } from './ContactComponents/contact-container/contact-container.component';
 import { GroupTableCompComponent } from './GroupComponents/group-table-comp/group-table-comp.component';
 import { AuthGuard } from 'src/app/AppServices/auth-guard.guard';
+import { EventInboxComponent } from './EventComponent/event-inbox/event-inbox.component';
 
 const routes: Routes = [
   {
@@ -33,6 +34,10 @@ const routes: Routes = [
       {
         path: 'userevent',
         component: UsereventComponent
+      },
+      {
+        path: 'receivedevents',
+        component: EventInboxComponent
       },
       {
         path: 'addcontact',

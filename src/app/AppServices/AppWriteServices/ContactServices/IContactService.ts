@@ -4,13 +4,13 @@ import { ApiResponseModel } from "src/app/Models/ResultModel";
 
 export abstract class IContactService
 {
-    abstract createContactWithAddress(contactModel:ContactsModel):Promise<boolean>;
+    abstract createContactWithAddress(contactModel:ContactsModel):Promise<ApiResponseModel<ContactsModel>>;
 
-    abstract getContactByRecordIdAsync(recordId:string):Promise<ContactsModel>;
+    abstract getContactByRecordIdAsync(recordId:string):Promise<ApiResponseModel<ContactsModel>>;
 
-    abstract getContactListByOwnerIdAsync(ownerId:string):Promise<ContactsModel[]>;
+    abstract getContactListByOwnerIdAsync(ownerId:string):Promise<ApiResponseModel<ContactsModel[]>>;
 
     abstract getPaginatedContactListByUserIdAsync(userId:string,paginatedModel:PaginationSpecificationModel):Promise<ApiResponseModel<ContactsModel[]>>;
 
-    abstract deleteContactByRecordIdAsync(recordId:string):Promise<boolean>;
+    abstract deleteContactByRecordIdAsync(recordId:string):Promise<ApiResponseModel<boolean>>;
 }

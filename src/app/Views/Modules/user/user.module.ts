@@ -45,6 +45,9 @@ import { IUserBrokerService } from 'src/app/AppServices/AppWriteServices/UserSer
 import { UserBrokerService } from 'src/app/AppServices/AppWriteServices/UserServices/user-broker.service';
 import { ICategoryBrokerService } from 'src/app/AppServices/AppWriteServices/CategoryService/ICategoryBrokerService';
 import { CategoryBrokerService } from 'src/app/AppServices/AppWriteServices/CategoryService/category-broker.service';
+import { EventInboxComponent } from './EventComponent/event-inbox/event-inbox.component';
+import { TabViewModule } from 'primeng/tabview';
+import { CardModule } from 'primeng/card';
 
 
 @NgModule({
@@ -61,6 +64,8 @@ import { CategoryBrokerService } from 'src/app/AppServices/AppWriteServices/Cate
     GroupTableCompComponent,
     GroupModalComponent,
     UserGroupComponent,
+    AddContactModalComponent,
+    EventInboxComponent
   ],
   imports: [
     CommonModule,
@@ -76,7 +81,9 @@ import { CategoryBrokerService } from 'src/app/AppServices/AppWriteServices/Cate
     FileUploadModule,
     DividerModule,
     SidebarModule,
-    ToastModule
+    ToastModule,
+    TabViewModule,
+    CardModule
   ],
   providers: 
   [

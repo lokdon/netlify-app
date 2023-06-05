@@ -19,45 +19,146 @@ export class ContactsService implements IContactService {
   appWriteClient :Client;
   
   constructor(private appWriteHttpService:AppWriteHttpClientService,
+              private addressService:IAddressService,
               private userService:IUserBrokerService) 
   { 
     this.appWriteClient = this.appWriteHttpService.getClient();
     this.appWriteDataBase = new Databases(this.appWriteClient);
   }
   
-  async createContactWithAddress(contactModel: ContactsModel): Promise<boolean> {
+  async createContactWithAddress(contactModel: ContactsModel): Promise<ApiResponseModel<ContactsModel>> {
          
+           let apiResponse:ApiResponseModel<ContactsModel>={
+             IsValid: false,
+             Errors: [],
+             Success: {
+               RecordId: '',
+               FirstName: '',
+               LastName: '',
+               Email: '',
+               MobileNo: '',
+               CreatedById: '',
+               ContactAddress: {
+                 RecordId: '',
+                 Address1: '',
+                 Address2: '',
+                 Country: '',
+                 State: '',
+                 City: '',
+                 Pincode: '',
+                 OwnerId: ''
+               }
+             },
+             TotalRecordCount: 0
+           }
+    
            let isCreated:boolean =false;
           //first save contact &&  gets it record id
-           let contactRecordId = await this.saveContactAsync(contactModel);
+          var addedContactModel = await this.saveContactAsync(contactModel);
+          
+          if(addedContactModel.RecordId) {
+            apiResponse.IsValid =true;
+            apiResponse.Success = await this.saveContactAsync(contactModel);
+          }else{
+            apiResponse.IsValid =false;
+          }
+         
            //save address with that record id
-           if(contactRecordId)
+           if(apiResponse.IsValid)
            {
-              
-  
-              let savedAddressId = await this.saveAddressAsync(contactModel.ContactAddress,contactRecordId);
-
-              if(savedAddressId)
+              let savedAddressResponse = await this.addressService
+                                                  .createAddressAsync(
+                                                    contactModel.ContactAddress,
+                                                    addedContactModel.RecordId);
+              if(savedAddressResponse.IsValid)
               {
-                 isCreated =true;
+                 contactModel.ContactAddress.RecordId = savedAddressResponse.Success.RecordId;
+                 contactModel.ContactAddress.Address1 = savedAddressResponse.Success.Address1;
+                 contactModel.ContactAddress.Address2 = savedAddressResponse.Success.Address2;
+                 contactModel.ContactAddress.Country = savedAddressResponse.Success.Country;
+                 contactModel.ContactAddress.State = savedAddressResponse.Success.State;
+                 contactModel.ContactAddress.City = savedAddressResponse.Success.City;
+                 contactModel.ContactAddress.Pincode = savedAddressResponse.Success.Pincode;
+
               }else{
                 //rolled back the created user
-
+                apiResponse.IsValid =false;
                 isCreated =false;
               }
-
-           }else{
-              isCreated =false;
            }
-         return isCreated; 
+         return apiResponse; 
   }
-  async getContactByRecordIdAsync(recordId: string): Promise<ContactsModel> {
+
+  async getContactByRecordIdAsync(recordId: string): Promise<ApiResponseModel<ContactsModel>> {
+    let apiResponse:ApiResponseModel<ContactsModel>={
+      IsValid: false,
+      Errors: [],
+      Success: {
+        RecordId: '',
+        FirstName: '',
+        LastName: '',
+        Email: '',
+        MobileNo: '',
+        CreatedById: '',
+        ContactAddress: {
+          RecordId: '',
+          Address1: '',
+          Address2: '',
+          Country: '',
+          State: '',
+          City: '',
+          Pincode: '',
+          OwnerId: ''
+        }
+      },
+      TotalRecordCount: 0
+    }
+    
+    try{
+      const contact = await this.appWriteDataBase.getDocument(
+        AppResources.eventManagerDatabaseId,
+        AppResources.contactsCollectionId,
+        recordId
+      )
+
+
+      if(contact.$id)
+      {
+        let model:ContactsModel={
+          RecordId: contact.$id,
+          FirstName: contact['first_name'],
+          LastName: contact['last_name'],
+          Email: contact['email'],
+          MobileNo: contact['mobile_no'],
+          CreatedById: contact['user_id'],
+          ContactAddress: {
+            RecordId: '',
+            Address1: '',
+            Address2: '',
+            Country: '',
+            State: '',
+            City: '',
+            Pincode: '',
+            OwnerId: ''
+          }
+        }
+        apiResponse.IsValid =true;
+        apiResponse.Success =model;
+      }
+  
+     
+      } catch(e)
+      {
+        apiResponse.IsValid =false;
+        console.log('some exception occurred while fetching group')
+      }
+          return apiResponse;
+  }
+
+  async getContactListByOwnerIdAsync(ownerId: string): Promise<ApiResponseModel<ContactsModel[]>> {
     throw new Error('Method not implemented.');
   }
-  async getContactListByOwnerIdAsync(ownerId: string): Promise<ContactsModel[]> {
-    throw new Error('Method not implemented.');
-  }
-  async deleteContactByRecordIdAsync(recordId: string): Promise<boolean> {
+  async deleteContactByRecordIdAsync(recordId: string): Promise<ApiResponseModel<boolean>> {
     throw new Error('Method not implemented.');
   }
 
@@ -77,7 +178,7 @@ export class ContactsService implements IContactService {
             AppResources.eventManagerDatabaseId,
             AppResources.contactsCollectionId,
           [
-              Query.equal("user_id", '6464b316df0ceb0f7377'),
+              Query.equal("user_id", userId),
               Query.limit(paginatedModel.Limit),
               Query.offset(paginatedModel.Offset),
               Query.orderAsc('first_name')
@@ -110,6 +211,8 @@ export class ContactsService implements IContactService {
         apiResponseModel.IsValid =true;
         apiResponseModel.Success =result;
         apiResponseModel.TotalRecordCount=groupDocuments.total;
+
+        console.log(groupDocuments.documents);
       }
   }
   catch(e)
@@ -122,10 +225,9 @@ export class ContactsService implements IContactService {
 
 
 
-  async saveContactAsync(contactModel:ContactsModel):Promise<string>
+  async saveContactAsync(contactModel:ContactsModel):Promise<ContactsModel>
   {
     
-    let contactRecordId:string ='';
     
     try{
       let createdById = await this.userService.getCurrentLoggedInUserIdAsync();
@@ -141,50 +243,15 @@ export class ContactsService implements IContactService {
       let result =await this.appWriteDataBase.createDocument(AppResources.eventManagerDatabaseId, AppResources.contactsCollectionId, ID.unique(), appwriteContactEntity);
       if(result.$id)
       {
-        contactRecordId = result.$id;
-        console.log('inserted successfully')
-      }else{
-        console.log('some error occurred');
-      } 
-    }catch(e)
-    {
-        console.log("Some excpetion occurred while saving contact ");
-        throw e;
-    }
-    return contactRecordId; 
-  
-  }
-  async saveAddressAsync(addessModel:AddressModel,contactRecordId:string):Promise<string>
-  {
-    
-    let addressRecordId:string =''
-    
-    
-    let appWriteAddressEntity = {
-      addressline1:addessModel.Address1,
-      addressline2:addessModel.Address2,
-      country:addessModel.Country,
-      state:addessModel.State,
-      city:addessModel.City,
-      pincode:addessModel.Pincode,
-      owner_id:contactRecordId
-    };
-    
-    try{
-      let result =await this.appWriteDataBase.createDocument(AppResources.eventManagerDatabaseId, AppResources.addressCollectionId, ID.unique(), appWriteAddressEntity);
-      if(result.$id)
-      {
-        addressRecordId = result.$id;
-        console.log('inserted successfully')
-      }else{
-        console.log('some error occurred');
+        contactModel.RecordId = result.$id;
       }
     }catch(e)
     {
-      console.log("Some excpetion occurred while saving address for contact" + addessModel.OwnerId);
-      throw e;
+        console.log("Some excpetion occurred while saving contact ");
+        //throw e;
     }
-    return addressRecordId; 
+    return contactModel; 
   
   }
+  
 }

@@ -42,7 +42,7 @@
                             </div>
                             <div class="col-12">
                               <label for="yourPassword" class="form-label">Password</label>
-                              <input type="text" class="form-control" formControlName="password">
+                              <input type="password" class="form-control" formControlName="password">
                               <div *ngIf="registerFormErrors.isFormControlValid(registerForm,'password',submitted)" class="alert alert-danger">
                                 <div *ngIf="registerFormErrors.showRequiredError(registerForm,'password')">
                                   {{requiredError}}

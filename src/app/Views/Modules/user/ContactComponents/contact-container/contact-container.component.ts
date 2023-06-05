@@ -1,137 +1,167 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { IAddressService } from 'src/app/AppServices/AppWriteServices/AddressServices/IAddressService';
-import { IContactService } from 'src/app/AppServices/AppWriteServices/ContactServices/IContactService';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { LazyLoadEvent, MessageService } from 'primeng/api';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { GroupServiceNotifier } from 'src/app/AppServices/SharedComponentServices/GroupServiceNotifier';
+import { GroupModel } from 'src/app/Models/GroupModel';
+import { IGroupBrokerService } from 'src/app/AppServices/AppWriteServices/GroupServices/IGroupBrokerService';
+import { IUserBrokerService } from 'src/app/AppServices/AppWriteServices/UserServices/IUseBrokerService';
+import { PaginationSpecificationModel } from 'src/app/Models/QuerySpecificationModel';
+import { Table } from 'primeng/table';
+import { AddContactModalComponent } from '../add-contact-modal/add-contact-modal.component';
 import { ContactsModel } from 'src/app/Models/ContactsModel';
+import { IContactService } from 'src/app/AppServices/AppWriteServices/ContactServices/IContactService';
+import { ContactNotifier } from 'src/app/AppServices/SharedComponentServices/ContactNotifier';
+
 
 @Component({
   selector: 'app-contact-container',
   templateUrl: './contact-container.component.html',
-  styleUrls: ['./contact-container.component.css']
+  styleUrls: ['./contact-container.component.css'],
+  providers:[DialogService,MessageService]
 })
 
-export class ContactContainerComponent implements OnInit {
-    
-  contactModel:ContactsModel={
-                  RecordId: '',
-                  FirstName: '',
-                  LastName: '',
-                  Email: '',
-                  MobileNo: '',
-                  CreatedById: '',
-                  ContactAddress: {
-                        RecordId: '',
-                        Address1: '',
-                        Address2: '',
-                        Country: '',
-                        State: '',
-                        City: '',
-                        Pincode: '',
-                        OwnerId: ''
-                    }
-  };
-   
+export class ContactContainerComponent implements OnInit  {
+  ref: DynamicDialogRef;
 
-  contactFormGroup: FormGroup;
+  contactList:ContactsModel[]=[];
+  totalRecords:number=0;
+  loading:boolean =false;
+  userId:string=''
+
+  @ViewChild('table') table: Table | undefined;
   
-  constructor(builder: FormBuilder,
+  first = 0;
+
+  rows = 2;
+
+  //paging fields
+  currentPageIndex:number=0;
+  pageOffset:number = this.rows;
+  recordPerPage:number=this.rows;
+  
+  constructor(public dialogService: DialogService, 
+              public messageService: MessageService,
+              public contactNotifier:ContactNotifier,
               private contactService:IContactService,
-              private addressService:IAddressService){
-
-                this.contactFormGroup = builder.group({
-                  firstName: ['lokesh',[Validators.required]],
-                  lastName: ['',Validators.required],
-                  email: ['',[Validators.required, Validators.email]],
-                  mobileNo:['',[Validators.required]],
-                  address1:['',[Validators.required]],
-                  address2:['',[Validators.required]],
-                  country:['',[Validators.required]],
-                  state:['',[Validators.required]],
-                  city:[],
-                  pincode:[],
-                });      
-
-  }
- async ngOnInit():Promise<void> {
- 
-  // this.contactModel.Email = "lk@gmail.com";
-    // this.contactModel.FirstName = "lokesh";
-    // this.contactModel.LastName ="contact";
-    // this.contactModel.MobileNo ="456789000";
-    // this.contactModel.ContactAddress.Address1 ="address1";
-    // this.contactModel.ContactAddress.Address2 ="address2";
-    // this.contactModel.ContactAddress.Country ="country";
-    // this.contactModel.ContactAddress.State ="state";
-    // this.contactModel.ContactAddress.City ="city";
-    // this.contactModel.ContactAddress.Pincode ="pincode";
-
-    // var result = await this.contactService.createContactWithAddress(this.contactModel);
-
-    // console.log(result);
-
-  }
-
-  get contactFormControl()
-  {
-    return this.contactFormGroup.controls;
-  }
-
-  async submitFormAsync(){
-    alert('submit form called');
-    
-    if(this.contactFormGroup.valid)
-    {
-        await this.createContactDetailsAsync();  
-    }else
-    {
-       Object.keys(this.contactFormGroup.controls).forEach(field => {
-         const control = this.contactFormGroup.get(field);
-         control?.markAsTouched({ onlySelf: true });
-        });
-    }
-
-  }
-
-
-  async createContactDetailsAsync(){
-    var firstName = this.contactFormGroup.controls['firstName'].value;
-    var lastName = this.contactFormGroup.controls['lastName'].value;
-    var email = this.contactFormGroup.controls['email'].value;
-    var mobileNo = this.contactFormGroup.controls['mobileNo'].value;
-    var address1 = this.contactFormGroup.controls['address1'].value;
-    var address2 = this.contactFormGroup.controls['address2'].value;
-    var country = this.contactFormGroup.controls['country'].value;
-    var state = this.contactFormGroup.controls['state'].value;
-    var city = this.contactFormGroup.controls['city'].value;
-    var pincode = this.contactFormGroup.controls['pincode'].value;
-
-
-    this.contactModel.FirstName = firstName;
-    this.contactModel.LastName =lastName;
-    this.contactModel.Email =email;
-    this.contactModel.MobileNo =mobileNo;
-    this.contactModel.ContactAddress.Address1 =address1;
-    this.contactModel.ContactAddress.Address2 =address2;
-    this.contactModel.ContactAddress.Country =country;
-    this.contactModel.ContactAddress.State =state;
-    this.contactModel.ContactAddress.City =city;
-    this.contactModel.ContactAddress.Pincode =pincode;
-
-    console.log(this.contactModel);
-
-    //return false;
-
-
-    var result = await this.contactService.createContactWithAddress(this.contactModel);
-
-    if(result)
-    {
-      alert('contact added successfully');
-      this.contactFormGroup.reset(this.contactFormGroup.value);
-    }
+              private userService:IUserBrokerService) {
+     
+     this.ref = new DynamicDialogRef();
     
   }
 
-  
+   paginatedModel:PaginationSpecificationModel={
+    Limit: 0,
+    Offset: 0
+  } 
+
+ async ngOnInit() {
+        this.contactNotifier.subject
+        .subscribe({
+          next:(async (message) => await this.refreshDataTable(message))
+       });
+   }
+
+   async refreshDataTable(message:string)
+   {
+        this.paginatedModel.Limit = this.rows
+        this.paginatedModel.Offset = 0;
+        
+        this.loading = true;  
+        await this.loadContactDataInDataTable();
+        if (this.table) {
+            this.lazyLoadContactsAsync(this.table.createLazyLoadMetadata());
+         }
+
+         this.loading =false;
+   }
+
+
+   openContactDialogBox(contactRecordId:string) {
+    this.ref = this.dialogService.open(AddContactModalComponent, {
+        header: 'Contact',
+        width: '100%',
+        height:'100%',
+        contentStyle: { overflow: 'auto' },
+        baseZIndex: 10000,
+        closable: true,
+        maximizable: true,
+        data:{
+          contactRecordId:contactRecordId
+        }
+    },
+    );
+
+    this.ref.onClose.subscribe((product) => {
+        alert('closing the dialog box')
+    });
+
+    // this.ref.onMaximize.subscribe((value) => {
+    //     this.messageService.add({ severity: 'info', summary: 'Maximized', detail: `maximized: ${value.maximized}` });
+    // });    
 
 }
+
+   async lazyLoadContactsAsync(event:LazyLoadEvent)
+   {
+    this.userId = await this.userService.getCurrentLoggedInUserIdAsync();
+     
+    this.paginatedModel.Limit = event.rows!=undefined? event.rows:0;
+     this.paginatedModel.Offset = event.first!=undefined? event.first:0;
+    this.loading = true;    
+    await this.loadContactDataInDataTable();
+    this.loading = false;
+   }
+
+
+   async loadContactDataInDataTable()
+   {
+      this.contactList =[];
+      console.log(this.userId);
+      let response = await this.contactService.getPaginatedContactListByUserIdAsync(this.userId,this.paginatedModel)
+      this.totalRecords = response.TotalRecordCount;
+      this.table?.totalRecords
+
+      console.log(this.totalRecords);
+      
+      if(response.IsValid)
+      {
+        this.contactList =response.Success;
+        console.log(this.contactList);
+      }else{
+        //show errors
+
+      }
+      
+   }
+  
+  show() {
+      this.ref = this.dialogService.open(AddContactModalComponent, {
+          header: 'Group',
+          width: '35%',
+          height:'50%',
+          contentStyle: { overflow: 'hidden' },
+          baseZIndex: 10000,
+          closable: false
+          //maximizable: true
+      });
+
+      // this.ref.onClose.subscribe((product: Product) => {
+      //     if (product) {
+      //         this.messageService.add({ severity: 'info', summary: 'Product Selected', detail: product.name });
+      //     }
+      // });
+
+      // this.ref.onMaximize.subscribe((value) => {
+      //     this.messageService.add({ severity: 'info', summary: 'Maximized', detail: `maximized: ${value.maximized}` });
+      // });    
+
+ }
+
+  ngOnDestroy() {
+    if (this.ref) {
+        this.ref.close();
+    }
+  }
+       
+}
+

@@ -51,7 +51,6 @@ async submitFormAsync(){
     {
       await this.createGroupAsync();
       this.groupNotifier.InvokeGroupMessageEvent(this.groupModel.RecordId);   
-      console.log(this.groupModel.RecordId);
     }else
     {
       Object.keys(this.groupFormGroup.controls).forEach(field => {
@@ -77,7 +76,6 @@ async createGroupAsync(){
     {
         this.groupModel = result.Success;
         this.groupFormGroup.reset(this.groupFormGroup.value);
-        console.log(this.ref);
         this.ref.close();
     }
  }
