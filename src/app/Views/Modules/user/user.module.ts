@@ -21,7 +21,6 @@ import { DividerModule } from 'primeng/divider';
 import { SidebarModule } from 'primeng/sidebar';
 import { UsereventComponent } from './EventComponent/userevent/userevent.component';
 
-
 import { AddContactModalComponent } from './ContactComponents/add-contact-modal/add-contact-modal.component';
 import { ContactContainerComponent } from './ContactComponents/contact-container/contact-container.component';
 
@@ -48,7 +47,12 @@ import { CategoryBrokerService } from 'src/app/AppServices/AppWriteServices/Cate
 import { EventInboxComponent } from './EventComponent/event-inbox/event-inbox.component';
 import { TabViewModule } from 'primeng/tabview';
 import { CardModule } from 'primeng/card';
-
+import { MyEventTabViewContainerComponent } from './EventComponent/MyEvents/my-event-tab-view-container/my-event-tab-view-container.component';
+import { MyAllEventTabPanelComponent } from './EventComponent/MyEvents/my-all-event-tab-panel/my-all-event-tab-panel.component';
+import { MyEventSentTabViewComponent } from './EventComponent/MyEvents/my-event-sent-tab-view/my-event-sent-tab-view.component';
+import { MyEventReplyTabViewComponent } from './EventComponent/MyEvents/my-event-reply-tab-view/my-event-reply-tab-view.component';
+import { EventmodalComponent } from './EventComponent/MyEvents/eventmodal/eventmodal.component';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 @NgModule({
   declarations: [
@@ -65,7 +69,12 @@ import { CardModule } from 'primeng/card';
     GroupModalComponent,
     UserGroupComponent,
     AddContactModalComponent,
-    EventInboxComponent
+    EventInboxComponent,
+    MyEventTabViewContainerComponent,
+    MyAllEventTabPanelComponent,
+    MyEventSentTabViewComponent,
+    MyEventReplyTabViewComponent,
+    EventmodalComponent,
   ],
   imports: [
     CommonModule,
@@ -83,18 +92,17 @@ import { CardModule } from 'primeng/card';
     SidebarModule,
     ToastModule,
     TabViewModule,
-    CardModule
+    CardModule,
+    InputNumberModule,
   ],
-  providers: 
-  [
-      { provide: ICategoryBrokerService, useClass: CategoryBrokerService },
-      { provide: IUserBrokerService, useClass: UserBrokerService },
-      { provide: IStorageBrokerService, useClass: StorageBrokerService },
-      { provide: IEventBrokerService, useClass: EventBrokerService },
-      { provide: IContactService, useClass: ContactsService },
-      { provide: IAddressService, useClass: AddressService },
-      { provide: IGroupBrokerService, useClass: GroupBrokerService },
-    
+  providers: [
+    { provide: ICategoryBrokerService, useClass: CategoryBrokerService },
+    { provide: IUserBrokerService, useClass: UserBrokerService },
+    { provide: IStorageBrokerService, useClass: StorageBrokerService },
+    { provide: IEventBrokerService, useClass: EventBrokerService },
+    { provide: IContactService, useClass: ContactsService },
+    { provide: IAddressService, useClass: AddressService },
+    { provide: IGroupBrokerService, useClass: GroupBrokerService },
   ],
 })
-export class UserModule { }
+export class UserModule {}

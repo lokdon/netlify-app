@@ -11,6 +11,7 @@ import { ContactContainerComponent } from './ContactComponents/contact-container
 import { GroupTableCompComponent } from './GroupComponents/group-table-comp/group-table-comp.component';
 import { AuthGuard } from 'src/app/AppServices/auth-guard.guard';
 import { EventInboxComponent } from './EventComponent/event-inbox/event-inbox.component';
+import { MyEventTabViewContainerComponent } from './EventComponent/MyEvents/my-event-tab-view-container/my-event-tab-view-container.component';
 
 const routes: Routes = [
   {
@@ -38,6 +39,10 @@ const routes: Routes = [
       {
         path: 'receivedevents',
         component: EventInboxComponent
+      },
+      {
+        path: 'myevents',
+        component: MyEventTabViewContainerComponent
       },
       {
         path: 'addcontact',

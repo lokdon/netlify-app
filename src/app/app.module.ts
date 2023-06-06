@@ -17,12 +17,11 @@ import { AuthenticationModule } from './Views/Modules/authentication/authenticat
 import { UserModule } from './Views/Modules/user/user.module';
 import { BaseValidation } from './Validations/BaseValidation';
 import { RegisterValidation } from './Validations/RegisterValidation';
+import { TableModule } from 'primeng/table';
+import { StyleClassModule } from 'primeng/styleclass';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-   
-  ],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -31,10 +30,12 @@ import { RegisterValidation } from './Validations/RegisterValidation';
     ReactiveFormsModule,
     UserModule,
     BrowserAnimationsModule,
-    ProgressBarModule
+    ProgressBarModule,
+    TableModule,
+    StyleClassModule,
   ],
-  providers: [AppResources,RegisterValidation],
- 
-  bootstrap: [AppComponent]
+  providers: [AppResources, RegisterValidation],
+
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

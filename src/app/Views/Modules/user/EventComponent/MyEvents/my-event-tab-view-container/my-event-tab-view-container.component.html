@@ -1,0 +1,41 @@
+<div class="card">
+    <p-card header="Title" class="mt-4 ms-2">
+        <div class="d-flex justify-content-between" >
+            <div class="p-2 bd-highlight"> 
+               
+            </div>
+            <div class="ms-auto p-2 bd-highlight">
+                <p-button icon="pi pi-plus-circle" (click)="openEventDialogBox('')" styleClass="p-button-success p-button-sm"></p-button>
+                <!-- <p-button icon="pi pi-refresh" (click)="next()" class="ms-2" styleClass="p-button-sm"></p-button> 
+                <p-button icon="pi pi-refresh"  class="ms-2" styleClass="p-button-sm"></p-button> 
+                <p-button icon="pi pi-refresh" (click)="prev()" class="ms-2" styleClass="p-button-sm"></p-button>  -->
+            </div>
+        </div>  
+    </p-card>
+    <p-tabView styleClass="tabview-custom">
+        <p-tabPanel>
+            <ng-template pTemplate="header">
+                <i class="pi pi-calendar"></i>
+                <span>All Events</span>
+            </ng-template>
+            <app-my-all-event-tab-panel></app-my-all-event-tab-panel>
+        </p-tabPanel>
+        <p-tabPanel header="Header II">
+            <ng-template pTemplate="header">
+                <i class="pi pi-user"></i>
+                <span>Sent</span>
+            </ng-template>
+           <app-my-event-sent-tab-view></app-my-event-sent-tab-view>
+        </p-tabPanel>
+
+        <p-tabPanel header="Header II">
+            <ng-template pTemplate="header">
+                <i class="pi pi-user"></i>
+                <span>Reply</span>
+            </ng-template>
+           <app-my-event-reply-tab-view></app-my-event-reply-tab-view>
+        </p-tabPanel>
+       
+    </p-tabView>
+</div>
+

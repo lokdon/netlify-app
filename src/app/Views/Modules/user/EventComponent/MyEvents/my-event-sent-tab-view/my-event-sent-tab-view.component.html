@@ -1,0 +1,22 @@
+<div class="card">
+    <p-table [value]="eventList" [tableStyle]="{ 'min-width': '50rem' }">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Event Name</th>
+                <th>Sent By</th>
+                <th>Event Date</th>
+                <th>Expiration Date</th>
+                <th>Guests</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-event>
+            <tr>
+                <td>{{ event.Name }}</td>
+                <td>{{ event.EventDate }}</td>
+                <td>{{ event.SubmissionDate }}</td>
+                <td>{{ event.EventStatus }}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+

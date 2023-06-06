@@ -1,0 +1,176 @@
+<!-- <div class="card">
+    <div class="grid">
+      <div class="col"></div>
+      <div class="col">
+        <div class="field">
+          <label for="firstname1">Firstname</label>
+          <input id="firstname1" type="text" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
+      </div>
+      <div class="field">
+          <label for="lastname1">Lastname</label>
+          <input id="lastname1" type="text" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
+      </div>
+      </div>
+      <div class="col"></div>
+  </div>
+</div> -->
+
+<div class="card">
+  <div class="grid">
+    <div class="col col-offset-0">
+      <form [formGroup]="eventFormGroup" (ngSubmit)="submitFormAsync()">
+        <!--Event Name Row -->
+        <div class="formgrid grid">
+          <div class="field col">
+            <label for="firstname2">Firstname</label>
+            <input
+              type="text"
+              formControlName="name"
+              [ngClass]="{
+                'text-border-danger':
+                  eventFormControl['name'].invalid &&
+                  eventFormControl['name'].touched,
+                'text-border-success': !eventFormControl['name'].invalid
+              }"
+              class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
+              placeholder="eventStartDate"
+            />
+            <div
+              *ngIf="
+                eventFormControl['name'].invalid &&
+                (eventFormControl['name'].dirty ||
+                  eventFormControl['name'].touched)
+              "
+            >
+              <small
+                *ngIf="eventFormControl['name'].errors?.['required']"
+                id="username-help"
+                class="p-error"
+                >Username is not available.</small
+              >
+            </div>
+          </div>
+        </div>
+
+        <!--Event start date time row-->
+        <div class="formgrid grid">
+          <div class="field col">
+            <label for="firstname2">Start Date</label>
+            <p-calendar
+              formControlName="eventStartDate"
+              [showIcon]="true"
+              [style]="{ width: '100%', height: '20px;' }"
+              dateFormat="dd/mm/yy"
+              dataType="string"
+              appendTo="body"
+              [ngClass]="{
+                'text-border-danger':
+                  eventFormControl['eventStartDate'].invalid &&
+                  eventFormControl['eventStartDate'].touched,
+                'text-border-success':
+                  !eventFormControl['eventStartDate'].invalid
+              }"
+            >
+            </p-calendar>
+          </div>
+          <div class="field col">
+            <label for="lastname2">Start Time</label>
+            <p-calendar
+              formControlName="eventStartTime"
+              [showIcon]="true"
+              [timeOnly]="true"
+              dataType="string"
+              [style]="{ width: '100%', height: '20px;' }"
+              appendTo="body"
+              dateFormat="hh:mm"
+              [ngClass]="{
+                'text-border-danger':
+                  eventFormControl['eventStartTime'].invalid &&
+                  eventFormControl['eventStartTime'].touched,
+                'text-border-success':
+                  !eventFormControl['eventStartTime'].invalid
+              }"
+            >
+            </p-calendar>
+          </div>
+        </div>
+
+        <!--Event end  date and time row-->
+        <div class="formgrid grid">
+          <div class="field col">
+            <label for="firstname2">End Date</label>
+            <p-calendar
+              formControlName="eventEndDate"
+              [showIcon]="true"
+              [style]="{ width: '100%', height: '20px;' }"
+              appendTo="body"
+              dateFormat="dd.mm.yy"
+              [ngClass]="{
+                'text-border-danger':
+                  eventFormControl['eventEndDate'].invalid &&
+                  eventFormControl['eventEndDate'].touched,
+                'text-border-success': !eventFormControl['eventEndDate'].invalid
+              }"
+            >
+            </p-calendar>
+          </div>
+          <div class="field col">
+            <label for="lastname2">End Time</label>
+            <p-calendar
+              formControlName="eventEndTime"
+              [showIcon]="true"
+              [timeOnly]="true"
+              [style]="{ width: '100%', height: '20px;' }"
+              appendTo="body"
+              [ngClass]="{
+                'text-border-danger':
+                  eventFormControl['eventEndTime'].invalid &&
+                  eventFormControl['eventEndTime'].touched,
+                'text-border-success': !eventFormControl['eventEndTime'].invalid
+              }"
+            >
+            </p-calendar>
+          </div>
+        </div>
+
+        <div class="formgrid grid">
+          <div class="field col">
+            <label for="firstname2">Guests</label>
+            <input
+              type="text"
+              pInputText
+              formControlName="noOfGuest"
+              class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
+            />
+            <!-- <p-inputNumber
+              formControlName="noOfGuest"
+              inputId="minmax"
+              inputId="minmax"
+              mode="decimal"
+              [min]="0"
+              [max]="100"
+            >
+            </p-inputNumber> -->
+          </div>
+          <div class="field col"></div>
+        </div>
+
+        <div class="formgrid grid gx-5 grid-nogutter">
+          <div class="col text-center">
+            <button
+              pButton
+              type="submit"
+              label="Success"
+              styleClass="p-button-success"
+            ></button>
+            <p-button
+              label="Warning"
+              styleClass="p-button-warning ml-2"
+              (onClick)="resetForm()"
+            ></p-button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
