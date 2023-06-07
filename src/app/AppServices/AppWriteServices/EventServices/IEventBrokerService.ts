@@ -1,4 +1,5 @@
 import { EventModel, EventModelMVVM } from 'src/app/Models/EventModel';
+import { PaginationSpecificationModel } from 'src/app/Models/QuerySpecificationModel';
 import { ApiResponseModel } from 'src/app/Models/ResultModel';
 
 export abstract class IEventBrokerService {
@@ -21,5 +22,10 @@ export abstract class IEventBrokerService {
   abstract getEventWithStatusHistoryByUserIdAndEventIdAsync(
     userId: string,
     eventId: string
+  ): Promise<ApiResponseModel<EventModel[]>>;
+
+  abstract getAllEventsByUserIdByPaginatedModelAsync(
+    userId: string,
+    paginatedModel: PaginationSpecificationModel
   ): Promise<ApiResponseModel<EventModel[]>>;
 }

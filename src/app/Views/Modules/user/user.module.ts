@@ -53,6 +53,8 @@ import { MyEventSentTabViewComponent } from './EventComponent/MyEvents/my-event-
 import { MyEventReplyTabViewComponent } from './EventComponent/MyEvents/my-event-reply-tab-view/my-event-reply-tab-view.component';
 import { EventmodalComponent } from './EventComponent/MyEvents/eventmodal/eventmodal.component';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { IEventStatusBrokerService } from 'src/app/AppServices/AppWriteServices/EventServices/EventStatusService/IEventStatusBrokerService';
+import { EventStatusBrokerService } from 'src/app/AppServices/AppWriteServices/EventServices/EventStatusService/eventstatusbroker.service';
 
 @NgModule({
   declarations: [
@@ -103,6 +105,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
     { provide: IContactService, useClass: ContactsService },
     { provide: IAddressService, useClass: AddressService },
     { provide: IGroupBrokerService, useClass: GroupBrokerService },
+    { provide: IEventStatusBrokerService, useClass: EventStatusBrokerService },
   ],
 })
 export class UserModule {}

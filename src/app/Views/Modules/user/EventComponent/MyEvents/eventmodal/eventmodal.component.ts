@@ -1,9 +1,15 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { IEventStatusBrokerService } from 'src/app/AppServices/AppWriteServices/EventServices/EventStatusService/IEventStatusBrokerService';
 import { IEventBrokerService } from 'src/app/AppServices/AppWriteServices/EventServices/IEventBrokerService';
 import { IUserBrokerService } from 'src/app/AppServices/AppWriteServices/UserServices/IUseBrokerService';
-import { EventModel, EventStatus } from 'src/app/Models/EventModel';
+import { EventNotifier } from 'src/app/AppServices/SharedComponentServices/EventNotifier';
+import {
+  EventModel,
+  EventStatus,
+  EventStatusModel,
+} from 'src/app/Models/EventModel';
 
 @Component({
   selector: 'app-eventmodal',
@@ -18,7 +24,6 @@ export class EventmodalComponent {
     EventStartTime: '',
     EventEndDate: '',
     EventEndTime: '',
-    EventStatus: 0,
     OwnerId: '',
     NoOfGuest: 0,
   };
@@ -30,7 +35,9 @@ export class EventmodalComponent {
 
   constructor(
     private eventService: IEventBrokerService,
+    private eventStatusService: IEventStatusBrokerService,
     private userService: IUserBrokerService,
+    private userEventNotifier: EventNotifier,
     public config: DynamicDialogConfig,
     private ref: DynamicDialogRef,
     builder: FormBuilder
@@ -44,6 +51,8 @@ export class EventmodalComponent {
       noOfGuest: [this.eventModal.NoOfGuest, [Validators.required]],
     });
     this.receivedEventModalRecordId = this.config.data.id;
+
+    this.eventStatusService.demoFunc();
   }
 
   async ngOnInit(): Promise<void> {
@@ -88,13 +97,13 @@ export class EventmodalComponent {
     //this.assignValueToContactModel();
     //return false;
     await this.assignFormValueToEventModel();
-
-    console.log(this.eventModal);
-    return;
     var result = await this.eventService.createUserEventAsync(this.eventModal);
 
     if (result.IsValid) {
-      alert('event created successfully');
+      // this.eventStatusService.demoFunc();
+      await this.saveEventStatusAsync(result.Success.RecordId);
+      this.userEventNotifier.InvokeEventNotifier(result.Success.RecordId);
+      this.ref.close();
     } else {
       alert('some error occurred');
     }
@@ -108,12 +117,33 @@ export class EventmodalComponent {
     // }
   }
 
+  async saveEventStatusAsync(eventId: string) {
+    let currentUserId = await this.userService.getCurrentLoggedInUserIdAsync();
+
+    let eventStatusModel: EventStatusModel = {
+      RecordId: '',
+      EventId: eventId,
+      Status: EventStatus.Created,
+      FromUserId: currentUserId,
+      ToUserId: currentUserId,
+      StatusDate: new Date(),
+    };
+
+    let respose = await this.eventStatusService.createUserEventStatusAsync(
+      eventStatusModel
+    );
+
+    if (respose.IsValid) {
+      alert('status saved successgully');
+    } else {
+      alert('problem in saving event status');
+    }
+  }
+
   async assignFormValueToEventModel() {
     var name = this.eventFormGroup.controls['name'].value;
     var eventStartDate = this.eventFormGroup.controls['eventStartDate'].value;
-    console.log(eventStartDate);
     var eventStartTime = this.eventFormGroup.controls['eventStartTime'].value;
-    console.log(eventStartTime);
     var eventEndDate = this.eventFormGroup.controls['eventEndDate'].value;
     var eventEndTime = this.eventFormGroup.controls['eventEndTime'].value;
     var noOfGuest = this.eventFormGroup.controls['noOfGuest'].value;
@@ -125,9 +155,20 @@ export class EventmodalComponent {
     this.eventModal.EventEndTime = eventEndTime;
     this.eventModal.NoOfGuest = noOfGuest;
     if (!this.eventModal.RecordId) {
-      this.eventModal.EventStatus = EventStatus.Created;
       this.eventModal.OwnerId =
         await this.userService.getCurrentLoggedInUserIdAsync();
     }
   }
+
+  // getEventStatusModel(event): EventStatusModel {
+  //      let eventStatusModel: EventStatusModel = {
+  //     RecordId: '',
+  //     EventId: eventId,
+  //     Status: EventStatus.Created,
+  //     FromUserId: await this.userService.getCurrentLoggedInUserIdAsync(),
+  //     ToUserId: await this.userService.getCurrentLoggedInUserIdAsync(),
+  //     StatusDate: new Date(),
+  //   };
+
+  // }
 }

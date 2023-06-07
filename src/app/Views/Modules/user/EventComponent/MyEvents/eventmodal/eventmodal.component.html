@@ -80,9 +80,9 @@
               [showIcon]="true"
               [timeOnly]="true"
               dataType="string"
+              dateFormat="hh:mm"
               [style]="{ width: '100%', height: '20px;' }"
               appendTo="body"
-              dateFormat="hh:mm"
               [ngClass]="{
                 'text-border-danger':
                   eventFormControl['eventStartTime'].invalid &&
@@ -104,7 +104,8 @@
               [showIcon]="true"
               [style]="{ width: '100%', height: '20px;' }"
               appendTo="body"
-              dateFormat="dd.mm.yy"
+              dateFormat="dd/mm/yy"
+              dataType="string"
               [ngClass]="{
                 'text-border-danger':
                   eventFormControl['eventEndDate'].invalid &&
@@ -120,6 +121,8 @@
               formControlName="eventEndTime"
               [showIcon]="true"
               [timeOnly]="true"
+              dataType="string"
+              dateFormat="hh:mm"
               [style]="{ width: '100%', height: '20px;' }"
               appendTo="body"
               [ngClass]="{

@@ -1,21 +1,90 @@
+<!-- <div class="card">
+  <p-table [value]="eventList" [tableStyle]="{ 'min-width': '50rem' }">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Event Name</th>
+        <th>Sent By</th>
+        <th>Event Date</th>
+        <th>Expiration Date</th>
+        <th>Guests</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-event>
+      <tr>
+        <td>{{ event.Name }}</td>
+        <td>{{ event.EventDate }}</td>
+        <td>{{ event.EventDate }}</td>
+        <td>{{ event.EventDate }}</td>
+        <td>{{ event.SubmissionDate }}</td>
+        <td>{{ event.EventStatus }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div> -->
+
 <div class="card">
-    <p-table [value]="eventList" [tableStyle]="{ 'min-width': '50rem' }">
-        <ng-template pTemplate="header">
-            <tr>
-                <th>Event Name</th>
-                <th>Sent By</th>
-                <th>Event Date</th>
-                <th>Expiration Date</th>
-                <th>Guests</th>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-event>
-            <tr>
-                <td>{{ event.Name }}</td>
-                <td>{{ event.EventDate }}</td>
-                <td>{{ event.SubmissionDate }}</td>
-                <td>{{ event.EventStatus }}</td>
-            </tr>
-        </ng-template>
-    </p-table>
+  <p-toast></p-toast>
+  <p-table
+    [value]="eventList"
+    [lazy]="true"
+    (onLazyLoad)="lazyLoadEventsAsync($event)"
+    dataKey="RecordId"
+    [tableStyle]="{ 'min-width': '75rem' }"
+    [paginator]="true"
+    [rows]="rows"
+    selectionMode=" "
+    [totalRecords]="totalRecords"
+    [loading]="loading"
+    [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[2, 4, 8]"
+    #table
+  >
+    <ng-template pTemplate="caption">
+      <div class="d-flex justify-content-between">
+        <div class="p-2 bd-highlight">
+          <input
+            type="text"
+            placeholder="search"
+            pInputText
+            class="p-inputtext-sm"
+            [style]="{ width: '300px' }"
+          />
+          <p-button
+            icon="pi pi-refresh"
+            class="ms-2"
+            styleClass="p-button-sm"
+          ></p-button>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="Name">
+          Name <p-sortIcon field="name"></p-sortIcon>
+        </th>
+        <th pSortableColumn="Status">
+          Count <p-sortIcon field="price"></p-sortIcon>
+        </th>
+        <th pSortableColumn="Status">
+          Add <p-sortIcon field="price"></p-sortIcon>
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-event>
+      <tr>
+        <td>{{ event.Name }}</td>
+        <td>{{ event.EventStartDate }}</td>
+        <td>{{ event.EventStartTime }}</td>
+        <td>{{ event.EventEndDate }}</td>
+        <td>{{ event.EventEndTime }}</td>
+        <!-- <td>
+          <p-button
+            icon="pi pi-plus-circle"
+            (click)="openContactDialogBox(contact.RecordId)"
+            styleClass="p-button-success p-button-sm"
+          ></p-button>
+        </td> -->
+      </tr>
+    </ng-template>
+  </p-table>
 </div>

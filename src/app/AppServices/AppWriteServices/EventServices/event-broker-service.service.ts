@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ViewChild } from '@angular/core';
 import { IEventBrokerService } from './IEventBrokerService';
-import { Client, Databases, ID } from 'appwrite';
+import { Client, Databases, ID, Models, Query } from 'appwrite';
 import { AppWriteHttpClientService } from '../../app-write-http-client.service';
 import { AppResources } from '../../AppResources';
 import {
@@ -10,6 +10,10 @@ import {
   SubEventModel,
 } from 'src/app/Models/EventModel';
 import { ApiResponseModel } from 'src/app/Models/ResultModel';
+import { PaginationSpecificationModel } from 'src/app/Models/QuerySpecificationModel';
+import { DynamicDialogRef } from 'primeng/dynamicdialog';
+import { Table } from 'primeng/table';
+import { ContactsModel } from 'src/app/Models/ContactsModel';
 
 @Injectable({
   providedIn: 'root',
@@ -35,17 +39,10 @@ export class EventBrokerService implements IEventBrokerService {
     userEvent: EventModel
   ): Promise<ApiResponseModel<EventModel>> {
     let apiResponse = this.createApiResponseModelForEvent();
+    let appWriteEventEntity = this.mapEventEntityFromEventModal(userEvent);
+    console.log(appWriteEventEntity);
 
     try {
-      let appWriteEventEntity: EventEntity = {
-        name: userEvent.Name,
-        event_date: new Date(2022, 4, 19, 14, 56),
-        submission_date: new Date(2022, 4, 19, 14, 56),
-        event_status: userEvent.EventStatus,
-        no_of_guests: userEvent.NoOfGuest,
-        owner_id: userEvent.OwnerId,
-      };
-
       let result = await this.appWriteDataBase.createDocument(
         AppResources.eventManagerDatabaseId,
         AppResources.eventCollectionId,
@@ -67,6 +64,41 @@ export class EventBrokerService implements IEventBrokerService {
     }
 
     return apiResponse;
+  }
+
+  async getAllEventsByUserIdByPaginatedModelAsync(
+    userId: string,
+    paginatedModel: PaginationSpecificationModel
+  ): Promise<ApiResponseModel<EventModel[]>> {
+    let apiResponseModel = this.createApiResponseModelForEventList();
+
+    try {
+      const eventDocuments = await this.appWriteDataBase.listDocuments(
+        AppResources.eventManagerDatabaseId,
+        AppResources.eventCollectionId,
+        [
+          Query.equal('owner_id', userId),
+          Query.limit(paginatedModel.Limit),
+          Query.offset(paginatedModel.Offset),
+          Query.orderDesc('$createdAt'),
+        ]
+      );
+
+      if (eventDocuments.total > 0) {
+        console.log(eventDocuments.documents);
+        let result = eventDocuments.documents.map((document) => {
+          return this.mapEventModelFromAppWriteEventDocument(document);
+        });
+        apiResponseModel.IsValid = true;
+        apiResponseModel.Success = result;
+        apiResponseModel.TotalRecordCount = eventDocuments.total;
+      }
+    } catch (e) {
+      apiResponseModel.IsValid = false;
+      console.log('some exception occurred while fetching group');
+    }
+
+    return apiResponseModel;
   }
   async getUserEventByUserIdAndEventIdAsync(
     userId: string,
@@ -212,7 +244,6 @@ export class EventBrokerService implements IEventBrokerService {
         EventStartTime: '',
         EventEndDate: '',
         EventEndTime: '',
-        EventStatus: 0,
         OwnerId: '',
         NoOfGuest: 0,
       },
@@ -220,5 +251,66 @@ export class EventBrokerService implements IEventBrokerService {
     };
 
     return apiResponse;
+  }
+
+  createApiResponseModelForEventList(): ApiResponseModel<EventModel[]> {
+    let apiResponse: ApiResponseModel<EventModel[]> = {
+      IsValid: true,
+      Errors: [],
+      Success: [],
+      TotalRecordCount: 0,
+    };
+
+    return apiResponse;
+  }
+
+  convertStringDateTimeToDateTimeObject(date: string, time: string): Date {
+    var dateParts = date.split('/');
+    var timeParts = time.split(':');
+    console.log(dateParts);
+    var dateObject = new Date(
+      +dateParts[2],
+      +dateParts[1] - 1,
+      +dateParts[0],
+      +timeParts[0],
+      +timeParts[1]
+    );
+    console.log(dateObject);
+    return dateObject;
+  }
+
+  mapEventEntityFromEventModal(userEvent: EventModel): EventEntity {
+    let appWriteEventEntity: EventEntity = {
+      name: userEvent.Name,
+      event_date: this.convertStringDateTimeToDateTimeObject(
+        userEvent.EventStartDate,
+        userEvent.EventStartTime
+      ),
+      submission_date: this.convertStringDateTimeToDateTimeObject(
+        userEvent.EventEndDate,
+        userEvent.EventEndTime
+      ),
+      no_of_guests: userEvent.NoOfGuest,
+      owner_id: userEvent.OwnerId,
+    };
+
+    return appWriteEventEntity;
+  }
+
+  mapEventModelFromAppWriteEventDocument(
+    document: Models.Document
+  ): EventModel {
+    let model: EventModel = {
+      RecordId: document.$id,
+      Name: document['name'],
+      EventStartDate: document['event_date'],
+      EventStartTime: document['event_date'],
+      EventEndDate: document['submission_date'],
+      EventEndTime: document['submission_date'],
+      OwnerId: document['owner_id'],
+      NoOfGuest: document['no_of_guests'],
+    };
+
+    return model;
   }
 }
