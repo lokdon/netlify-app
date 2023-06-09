@@ -7,10 +7,12 @@ export abstract class IEventBrokerService {
     userEvent: EventModel
   ): Promise<ApiResponseModel<EventModel>>;
 
-  abstract getUserEventByUserIdAndEventIdAsync(
-    userId: string,
-    eventId: string,
-    eventStatus: number
+  abstract updateUserEventAsync(
+    userEvent: EventModel
+  ): Promise<ApiResponseModel<EventModel>>;
+
+  abstract getUserEventByEventIdAsync(
+    eventId: string
   ): Promise<ApiResponseModel<EventModel>>;
 
   abstract getListofUserEventByUserIdAndEventIdAsync(

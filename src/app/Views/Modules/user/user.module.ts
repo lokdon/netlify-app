@@ -55,6 +55,8 @@ import { EventmodalComponent } from './EventComponent/MyEvents/eventmodal/eventm
 import { InputNumberModule } from 'primeng/inputnumber';
 import { IEventStatusBrokerService } from 'src/app/AppServices/AppWriteServices/EventServices/EventStatusService/IEventStatusBrokerService';
 import { EventStatusBrokerService } from 'src/app/AppServices/AppWriteServices/EventServices/EventStatusService/eventstatusbroker.service';
+import { EventMenuComponent } from './EventComponent/event-menu/event-menu.component';
+import { MenuModule } from 'primeng/menu';
 
 @NgModule({
   declarations: [
@@ -77,6 +79,7 @@ import { EventStatusBrokerService } from 'src/app/AppServices/AppWriteServices/E
     MyEventSentTabViewComponent,
     MyEventReplyTabViewComponent,
     EventmodalComponent,
+    EventMenuComponent,
   ],
   imports: [
     CommonModule,
@@ -96,6 +99,7 @@ import { EventStatusBrokerService } from 'src/app/AppServices/AppWriteServices/E
     TabViewModule,
     CardModule,
     InputNumberModule,
+    MenuModule,
   ],
   providers: [
     { provide: ICategoryBrokerService, useClass: CategoryBrokerService },

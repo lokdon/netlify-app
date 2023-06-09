@@ -22,7 +22,7 @@
         <!--Event Name Row -->
         <div class="formgrid grid">
           <div class="field col">
-            <label for="firstname2">Firstname</label>
+            <label for="firstname2">Event Name</label>
             <input
               type="text"
               formControlName="name"
@@ -33,20 +33,22 @@
                 'text-border-success': !eventFormControl['name'].invalid
               }"
               class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
-              placeholder="eventStartDate"
+              placeholder="Event Name"
             />
             <div
               *ngIf="
-                eventFormControl['name'].invalid &&
-                (eventFormControl['name'].dirty ||
-                  eventFormControl['name'].touched)
+                eventFormErrors?.isFormControlValid(
+                  eventFormGroup,
+                  'name',
+                  isFormSubmitted
+                )
               "
             >
               <small
                 *ngIf="eventFormControl['name'].errors?.['required']"
                 id="username-help"
                 class="p-error"
-                >Username is not available.</small
+                >{{ requiredError }}</small
               >
             </div>
           </div>
@@ -57,7 +59,9 @@
           <div class="field col">
             <label for="firstname2">Start Date</label>
             <p-calendar
+              placeholder="Start Date"
               formControlName="eventStartDate"
+              [minDate]="minimumDate"
               [showIcon]="true"
               [style]="{ width: '100%', height: '20px;' }"
               dateFormat="dd/mm/yy"
@@ -72,6 +76,22 @@
               }"
             >
             </p-calendar>
+            <div
+              *ngIf="
+                eventFormErrors?.isFormControlValid(
+                  eventFormGroup,
+                  'eventStartDate',
+                  isFormSubmitted
+                )
+              "
+            >
+              <small
+                *ngIf="eventFormControl['eventStartDate'].errors?.['required']"
+                id="username-help"
+                class="p-error"
+                >{{ requiredError }}</small
+              >
+            </div>
           </div>
           <div class="field col">
             <label for="lastname2">Start Time</label>
@@ -92,6 +112,22 @@
               }"
             >
             </p-calendar>
+            <div
+              *ngIf="
+                eventFormErrors?.isFormControlValid(
+                  eventFormGroup,
+                  'eventStartTime',
+                  isFormSubmitted
+                )
+              "
+            >
+              <small
+                *ngIf="eventFormControl['eventStartTime'].errors?.['required']"
+                id="username-help"
+                class="p-error"
+                >{{ requiredError }}</small
+              >
+            </div>
           </div>
         </div>
 
@@ -114,6 +150,29 @@
               }"
             >
             </p-calendar>
+            <div
+              *ngIf="
+                eventFormErrors?.isFormControlValid(
+                  eventFormGroup,
+                  'eventEndDate',
+                  isFormSubmitted
+                )
+              "
+            >
+              <small
+                *ngIf="eventFormControl['eventEndDate'].errors?.['required']"
+                id="username-help"
+                class="p-error"
+                >{{ requiredError }}</small
+              >
+
+              <small
+                *ngIf="eventFormControl['eventEndDate'].errors?.['dateSumissionError']"
+                id="username-help"
+                class="p-error"
+                >{{ dateSumissionError }}</small
+              >
+            </div>
           </div>
           <div class="field col">
             <label for="lastname2">End Time</label>
@@ -133,6 +192,22 @@
               }"
             >
             </p-calendar>
+            <div
+              *ngIf="
+                eventFormErrors?.isFormControlValid(
+                  eventFormGroup,
+                  'eventEndTime',
+                  isFormSubmitted
+                )
+              "
+            >
+              <small
+                *ngIf="eventFormControl['eventEndTime'].errors?.['required']"
+                id="username-help"
+                class="p-error"
+                >{{ requiredError }}</small
+              >
+            </div>
           </div>
         </div>
 
@@ -145,15 +220,22 @@
               formControlName="noOfGuest"
               class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
             />
-            <!-- <p-inputNumber
-              formControlName="noOfGuest"
-              inputId="minmax"
-              inputId="minmax"
-              mode="decimal"
-              [min]="0"
-              [max]="100"
+            <div
+              *ngIf="
+                eventFormErrors?.isFormControlValid(
+                  eventFormGroup,
+                  'noOfGuest',
+                  isFormSubmitted
+                )
+              "
             >
-            </p-inputNumber> -->
+              <small
+                *ngIf="eventFormControl['noOfGuest'].errors?.['required']"
+                id="username-help"
+                class="p-error"
+                >{{ requiredError }}</small
+              >
+            </div>
           </div>
           <div class="field col"></div>
         </div>
@@ -163,12 +245,12 @@
             <button
               pButton
               type="submit"
-              label="Success"
+              label="Save"
               styleClass="p-button-success"
             ></button>
             <p-button
-              label="Warning"
-              styleClass="p-button-warning ml-2"
+              label="Close"
+              styleClass="p-button-danger ml-2"
               (onClick)="resetForm()"
             ></p-button>
           </div>

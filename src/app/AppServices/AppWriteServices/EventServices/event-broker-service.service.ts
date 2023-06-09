@@ -27,6 +27,34 @@ export class EventBrokerService implements IEventBrokerService {
     this.appWriteClient = appWriteHttpService.getClient();
     this.appWriteDataBase = new Databases(this.appWriteClient);
   }
+  async updateUserEventAsync(
+    userEvent: EventModel
+  ): Promise<ApiResponseModel<EventModel>> {
+    let apiResponse = this.createApiResponseModelForEvent();
+    let appWriteEventEntity = this.mapEventEntityFromEventModal(userEvent);
+    try {
+      let result = await this.appWriteDataBase.updateDocument(
+        AppResources.eventManagerDatabaseId,
+        AppResources.eventCollectionId,
+        userEvent.RecordId,
+        appWriteEventEntity
+      );
+      //JSON.stringify(appWriteEventEntity);
+      if (result.$id) {
+        userEvent.RecordId = result.$id;
+        apiResponse.IsValid = true;
+        apiResponse.Success = userEvent;
+      }
+    } catch (e) {
+      apiResponse.IsValid = false;
+      apiResponse.Errors.push({
+        Key: 'userevent_updation_error',
+        Value: 'Some exception occurred whie updating event',
+      });
+    }
+
+    return apiResponse;
+  }
 
   getEventWithStatusHistoryByUserIdAndEventIdAsync(
     userId: string,
@@ -100,12 +128,32 @@ export class EventBrokerService implements IEventBrokerService {
 
     return apiResponseModel;
   }
-  async getUserEventByUserIdAndEventIdAsync(
-    userId: string,
-    eventId: string,
-    eventStatus: number
+  async getUserEventByEventIdAsync(
+    eventId: string
   ): Promise<ApiResponseModel<EventModel>> {
-    throw new Error('Method not implemented.');
+    let apiResponse = this.createApiResponseModelForEvent();
+
+    try {
+      let result = await this.appWriteDataBase.getDocument(
+        AppResources.eventManagerDatabaseId,
+        AppResources.eventCollectionId,
+        eventId
+      );
+
+      if (result.$id) {
+        apiResponse.IsValid = true;
+        apiResponse.Success =
+          this.mapEventModelFromAppWriteEventDocument(result);
+      }
+    } catch (e) {
+      apiResponse.IsValid = false;
+      apiResponse.Errors.push({
+        Key: 'userevent_saving_error',
+        Value: 'Some exception occurred whie saving event',
+      });
+    }
+
+    return apiResponse;
   }
   async getListofUserEventByUserIdAndEventIdAsync(
     userId: string,
@@ -113,124 +161,6 @@ export class EventBrokerService implements IEventBrokerService {
     eventStatus: number
   ): Promise<ApiResponseModel<EventModel[]>> {
     throw new Error('Method not implemented.');
-  }
-
-  seedEventData(): EventModelMVVM[] {
-    let requiredList: EventModelMVVM[] = [];
-
-    //  let parentEvent1: EventModel={
-    //   $Id:'1',
-    //   Name:'demo1',
-    //   EventDate:new Date(),
-    //   SubmissionDate:new Date(),
-    //   EventStatus:1,
-
-    //   OwnerId:'1',
-
-    //   NoOfGuest:2
-    //  }
-
-    //  let parentEvent2: EventModel={
-    //   $Id:'2',
-    //   Name:'demo2',
-    //   EventDate:new Date(),
-    //   SubmissionDate:new Date(),
-    //   EventStatus:0,
-    //   UserId:'2',
-    //   OwnerId:'2',
-    //   IsOwned:true,
-    //   NoOfGuest:2
-    //  }
-
-    //  let parentEvent3: EventModel={
-    //   $Id:'3',
-    //   Name:'demo3',
-    //   EventDate:new Date(),
-    //   SubmissionDate:new Date(),
-    //   EventStatus:1,
-    //   UserId:'3',
-    //   OwnerId:'3',
-    //   IsOwned:true,
-    //   NoOfGuest:2
-    //  }
-
-    //  let subParentEvent1_1: SubEventModel={
-    //   $Id:'s1',
-    //   Name:'demo1',
-    //   EventDate:new Date(),
-    //   SubmissionDate:new Date(),
-    //   EventStatus:1,
-    //   ParentEventId:'1'
-    //  }
-
-    //  let subParentEvent1_2: SubEventModel={
-    //   $Id:'s2',
-    //   Name:'demo1',
-    //   EventDate:new Date(),
-    //   SubmissionDate:new Date(),
-    //   EventStatus:1,
-    //   ParentEventId:'1'
-    //  }
-
-    //  let subParentEvent2_1: SubEventModel={
-    //   $Id:'s3',
-    //   Name:'demo1',
-    //   EventDate:new Date(),
-    //   SubmissionDate:new Date(),
-    //   EventStatus:1,
-    //   ParentEventId:'2'
-    //  }
-
-    //  let subParentEvent2_2: SubEventModel={
-    //   $Id:'s4',
-    //   Name:'demo1',
-    //   EventDate:new Date(),
-    //   SubmissionDate:new Date(),
-    //   EventStatus:1,
-    //   ParentEventId:'2'
-    //  }
-
-    //  let subParentEvent3_1: SubEventModel={
-    //   $Id:'s5',
-    //   Name:'demo1',
-    //   EventDate:new Date(),
-    //   SubmissionDate:new Date(),
-    //   EventStatus:1,
-    //   ParentEventId:'3'
-    //  }
-
-    //  let subParentEvent3_2: SubEventModel={
-    //   $Id:'s6',
-    //   Name:'demo1',
-    //   EventDate:new Date(),
-    //   SubmissionDate:new Date(),
-    //   EventStatus:1,
-    //   ParentEventId:'3'
-    //  }
-
-    //  let eventMvvm1: EventModelMVVM=
-    //  {
-    //   ParentEvent : parentEvent1,
-    //   EventStatusHistory:[subParentEvent1_1,subParentEvent1_2]
-    //  }
-
-    //  let eventMvvm2: EventModelMVVM=
-    //  {
-    //   ParentEvent : parentEvent2,
-    //   EventStatusHistory:[subParentEvent2_1,subParentEvent2_2]
-    //  }
-
-    //  let eventMvvm3: EventModelMVVM=
-    //  {
-    //   ParentEvent : parentEvent3,
-    //   EventStatusHistory:[subParentEvent3_1,subParentEvent3_2]
-    //  }
-
-    //  requiredList.push(eventMvvm1);
-    //  requiredList.push(eventMvvm2);
-    //  requiredList.push(eventMvvm3);
-
-    return requiredList;
   }
 
   createApiResponseModelForEvent(): ApiResponseModel<EventModel> {
@@ -279,17 +209,31 @@ export class EventBrokerService implements IEventBrokerService {
     return dateObject;
   }
 
+  // mapEventEntityFromEventModal(userEvent: EventModel): EventEntity {
+  //   let appWriteEventEntity: EventEntity = {
+  //     name: userEvent.Name,
+  //     event_date: this.convertStringDateTimeToDateTimeObject(
+  //       userEvent.EventStartDate,
+  //       userEvent.EventStartTime
+  //     ),
+  //     submission_date: this.convertStringDateTimeToDateTimeObject(
+  //       userEvent.EventEndDate,
+  //       userEvent.EventEndTime
+  //     ),
+  //     no_of_guests: userEvent.NoOfGuest,
+  //     owner_id: userEvent.OwnerId,
+  //   };
+
+  //   return appWriteEventEntity;
+  // }
+
   mapEventEntityFromEventModal(userEvent: EventModel): EventEntity {
     let appWriteEventEntity: EventEntity = {
       name: userEvent.Name,
-      event_date: this.convertStringDateTimeToDateTimeObject(
-        userEvent.EventStartDate,
-        userEvent.EventStartTime
-      ),
-      submission_date: this.convertStringDateTimeToDateTimeObject(
-        userEvent.EventEndDate,
-        userEvent.EventEndTime
-      ),
+      event_start_date: userEvent.EventStartDate,
+      event_end_date: userEvent.EventEndDate,
+      event_start_time: userEvent.EventStartTime,
+      event_end_time: userEvent.EventEndTime,
       no_of_guests: userEvent.NoOfGuest,
       owner_id: userEvent.OwnerId,
     };
@@ -303,10 +247,10 @@ export class EventBrokerService implements IEventBrokerService {
     let model: EventModel = {
       RecordId: document.$id,
       Name: document['name'],
-      EventStartDate: document['event_date'],
-      EventStartTime: document['event_date'],
-      EventEndDate: document['submission_date'],
-      EventEndTime: document['submission_date'],
+      EventStartDate: document['event_start_date'],
+      EventStartTime: document['event_start_time'],
+      EventEndDate: document['event_end_date'],
+      EventEndTime: document['event_end_time'],
       OwnerId: document['owner_id'],
       NoOfGuest: document['no_of_guests'],
     };

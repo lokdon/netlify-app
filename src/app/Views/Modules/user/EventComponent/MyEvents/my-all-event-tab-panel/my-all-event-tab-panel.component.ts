@@ -8,6 +8,7 @@ import { IUserBrokerService } from 'src/app/AppServices/AppWriteServices/UserSer
 import { EventNotifier } from 'src/app/AppServices/SharedComponentServices/EventNotifier';
 import { EventModel } from 'src/app/Models/EventModel';
 import { PaginationSpecificationModel } from 'src/app/Models/QuerySpecificationModel';
+import { EventMenuComponent } from '../../event-menu/event-menu.component';
 
 @Component({
   selector: 'app-my-all-event-tab-panel',
@@ -32,6 +33,8 @@ export class MyAllEventTabPanelComponent implements OnInit, OnDestroy {
     Limit: 0,
     Offset: 0,
   };
+
+  // @ViewChild('childMenu') chMenu: EventMenuComponent | undefined;
   constructor(
     private userEventServie: IEventBrokerService,
     private userEventStatusService: IEventStatusBrokerService,
